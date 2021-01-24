@@ -11,7 +11,7 @@
 (require 'cl-lib)
 
 (defvar my-packages
-  '(nyan-mode)
+  '(nyan-mode google-translate emms)
   "A list of packages to ensure are installed at launch.")
 
 (defun my-packages-installed-p ()
@@ -27,9 +27,14 @@
     (when (not (package-installed-p p))
       (package-install p))))
 
-
-(require 'nyan-mode)
 ;;Настроки котика
+(require 'nyan-mode)
 (setq nyan-animate-nyancat t) ;; Анимация котика t/nul(да/нет)
 (setq nyan-wavy-trail t)
 (nyan-mode 1) ;;Загрузить котика
+
+;;Настройки google-translate
+(setq google-translate-default-source-language 'English)
+(setq google-translate-default-target-language 'Russian)
+
+;;Настройка emms

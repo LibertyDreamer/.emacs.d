@@ -1,0 +1,5 @@
+* hotkeys
+C-x C-b open buffer 
+C-x b switch to buffer
+
+(describe-key (kbd "C-x C-b"))

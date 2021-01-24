@@ -5,6 +5,8 @@
 (tool-bar-mode 1)
 ;;файл открыть сохранить панелька  отключен
 (menu-bar-mode 0)
+;;отображать номера строк слева
+(global-linum-mode 1)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -20,7 +22,4 @@
 
 ;;установить прозрачност (set-frame-parameter (selected-frame) 'alpha '(<active> . <inactive>)) ь
 (set-frame-parameter (selected-frame) 'alpha '(85 . 10))
-
-
-
 
