@@ -5,9 +5,9 @@
         ("MELPA Stable" . "https://stable.melpa.org/packages/")
         ("MELPA"        . "https://melpa.org/packages/"))
       package-archive-priorities
-      '(("MELPA Stable" . 10)
+      '(("MELPA Stable" . 0)
         ("GNU ELPA"     . 5)
-        ("MELPA"        . 0)))
+        ("MELPA"        . 10)))
 
 (package-initialize)
 (package-refresh-contents)
@@ -16,7 +16,7 @@
 (require 'cl-lib)
 
 (defvar my-packages ; <----------- PACKAGE HERE
-  '(nyan-mode spacemacs-theme telega)
+  '(nyan-mode spacemacs-theme google-translate telega)
   "A list of packages to ensure are installed at launch.")
 
 (defun my-packages-installed-p ()
