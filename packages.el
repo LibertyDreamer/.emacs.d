@@ -1,11 +1,5 @@
 ;установить репозиторий melpa
 (require 'package)
-;;(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
-;; and `package-pinned-packages`. Most users will not need or want to do this.
-;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-
-;test new package system
 (setq package-archives
       '(("GNU ELPA"     . "https://elpa.gnu.org/packages/")
         ("MELPA Stable" . "https://stable.melpa.org/packages/")
@@ -14,7 +8,6 @@
       '(("MELPA Stable" . 10)
         ("GNU ELPA"     . 5)
         ("MELPA"        . 0)))
-;;;;;
 
 (package-initialize)
 (package-refresh-contents)
@@ -22,8 +15,8 @@
 ;; Comment out if you've already loaded this package...
 (require 'cl-lib)
 
-(defvar my-packages
-  '(nyan-mode)
+(defvar my-packages ; <----------- PACKAGE HERE
+  '(nyan-mode spacemacs-theme telega)
   "A list of packages to ensure are installed at launch.")
 
 (defun my-packages-installed-p ()
