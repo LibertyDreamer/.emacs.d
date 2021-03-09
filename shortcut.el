@@ -15,7 +15,7 @@
 ;(global-set-key (kbd "C-q") 'scroll-up)
 
 ;(global-set-key (kbd "C-s") 'save-buffer)
-;;(global-set-key (kbd "C-f") 'load-buffer)
+;(global-set-key (kbd "C-f") 'load-buffer)
 
 ;(global-set-key (kbd "C-e") 'eval-last-sexp)
 
