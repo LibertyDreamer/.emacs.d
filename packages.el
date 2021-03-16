@@ -38,3 +38,8 @@
 (setq nyan-wavy-trail t)
 (nyan-mode 1) ;;Загрузить котика
 
+;;загрузить пакет meme такая срань так как его нет в melpa
+(add-to-list 'load-path "~/.emacs.d/melpa-not-yet-package")
+(require 'meme)
+(autoload 'meme "meme.el" "Create a meme from a collection" t)
+(autoload 'meme-file "meme.el" "Create a meme from a file" t)
