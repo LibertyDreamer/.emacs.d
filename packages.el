@@ -5,9 +5,9 @@
         ("MELPA Stable" . "https://stable.melpa.org/packages/")
         ("MELPA"        . "https://melpa.org/packages/"))
       package-archive-priorities
-      '(("MELPA Stable" . 0)
+      '(("MELPA Stable" . 10)
         ("GNU ELPA"     . 5)
-        ("MELPA"        . 10)))
+        ("MELPA"        . 0)))
 
 (package-initialize)
 (package-refresh-contents)
@@ -16,7 +16,7 @@
 (require 'cl-lib)
 
 (defvar my-packages ; <----------- PACKAGE HERE
-  '(nyan-mode spacemacs-theme google-translate telega)
+  '(nyan-mode spacemacs-theme google-translate telega helm xkcd neotree)
   "A list of packages to ensure are installed at launch.")
 
 (defun my-packages-installed-p ()
@@ -37,6 +37,10 @@
 (setq nyan-animate-nyancat t) ;; Анимация котика t/nul(да/нет)
 (setq nyan-wavy-trail t)
 (nyan-mode 1) ;;Загрузить котика
+
+;;Настройки HELM
+(global-set-key (kbd "M-x") 'helm-M-x)
+(setq-default helm-M-x-fuzzy-match t)
 
 ;;загрузить пакет meme такая срань так как его нет в melpa
 (add-to-list 'load-path "~/.emacs.d/melpa-not-yet-package")
