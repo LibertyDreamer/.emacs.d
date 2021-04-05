@@ -16,7 +16,7 @@
 (require 'cl-lib)
 
 (defvar my-packages ; <----------- PACKAGE HERE
-  '(nyan-mode spacemacs-theme google-translate define-it telega helm neotree)
+  '(nyan-mode spacemacs-theme google-translate define-it telega helm neotree rainbow-delimiters)
   "A list of packages to ensure are installed at launch.")
 
 (defun my-packages-installed-p ()
@@ -55,3 +55,5 @@
 ;; Настройки define-it
 (setq define-it-output-choice 'pop)
 
+;;Настройки rainbow-delimiters (подсветка скобок)
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
