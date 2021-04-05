@@ -10,7 +10,7 @@
         ("MELPA"        . 0)))
 
 (package-initialize)
-(package-refresh-contents)
+(package-refresh-contents t)
 
 ;; Comment out if you've already loaded this package...
 (require 'cl-lib)
@@ -43,7 +43,7 @@
 (setq-default helm-M-x-fuzzy-match t)
 
 ;;загрузить пакет meme такая срань так как его нет в melpa
-(add-to-list 'load-path "~/.emacs.d/melpa-not-yet-package")
+(add-to-list 'load-path "~/.emacs.d/melpa-not-yet-package-NOT-DELETE-THIS")
 (require 'meme)
 (autoload 'meme "meme.el" "Create a meme from a collection" t)
 (autoload 'meme-file "meme.el" "Create a meme from a file" t)
