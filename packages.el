@@ -52,9 +52,10 @@
 (setq google-translate-default-source-language "English")
 (setq google-translate-default-target-language "Russian")
 
+;; Настройки define-it
+(setq define-it-output-choice 'pop)
+
 ;; Fix error of "Failed to search TKK" google-translate
 (defun google-translate--get-b-d1 ()
     ;; TKK='427110.1469889687'
   (list 427110 1469889687))
-
-
