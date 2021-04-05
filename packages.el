@@ -16,7 +16,7 @@
 (require 'cl-lib)
 
 (defvar my-packages ; <----------- PACKAGE HERE
-  '(nyan-mode spacemacs-theme google-translate define-it telega helm xkcd neotree)
+  '(nyan-mode spacemacs-theme google-translate define-it telega helm neotree)
   "A list of packages to ensure are installed at launch.")
 
 (defun my-packages-installed-p ()
@@ -49,13 +49,9 @@
 (autoload 'meme-file "meme.el" "Create a meme from a file" t)
 
 ;; Настройки google-translate
-(setq google-translate-default-source-language "English")
-(setq google-translate-default-target-language "Russian")
+(setq google-translate-default-source-language "en")
+(setq google-translate-default-target-language "ru")
 
 ;; Настройки define-it
 (setq define-it-output-choice 'pop)
 
-;; Fix error of "Failed to search TKK" google-translate
-(defun google-translate--get-b-d1 ()
-    ;; TKK='427110.1469889687'
-  (list 427110 1469889687))
