@@ -57,3 +57,8 @@
 
 ;;Настройки rainbow-delimiters (подсветка скобок)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+
+;; Настройки Cmake-mode
+
+(setq load-path (cons (expand-file-name "/dir/with/cmake-mode") load-path))
+(require 'cmake-mode)
