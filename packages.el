@@ -16,7 +16,7 @@
 (require 'cl-lib)
 
 (defvar my-packages ; <----------- PACKAGE HERE
-  '(nyan-mode spacemacs-theme google-translate define-it telega helm neotree rainbow-delimiters)
+  '(nyan-mode spacemacs-theme google-translate define-it telega helm neotree rainbow-delimiters cmake-mode)
   "A list of packages to ensure are installed at launch.")
 
 (defun my-packages-installed-p ()
@@ -32,7 +32,7 @@
     (when (not (package-installed-p p))
       (package-install p))))
 
-;;Настроки котика
+;;Настройки котика
 (require 'nyan-mode)
 (setq nyan-animate-nyancat t) ;; Анимация котика t/nul(да/нет)
 (setq nyan-wavy-trail t)
