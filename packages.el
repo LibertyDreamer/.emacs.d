@@ -16,7 +16,7 @@
 (require 'cl-lib)
 
 (defvar my-packages ; <----------- PACKAGE HERE
-  '(nyan-mode spacemacs-theme google-translate define-it telega helm neotree rainbow-delimiters cmake-mode)
+  '(nyan-mode spacemacs-theme google-translate define-it telega helm neotree rainbow-delimiters company)
   "A list of packages to ensure are installed at launch.")
 
 (defun my-packages-installed-p ()
@@ -59,6 +59,19 @@
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
 ;; Настройки Cmake-mode
-
 (setq load-path (cons (expand-file-name "/dir/with/cmake-mode") load-path))
 (require 'cmake-mode)
+
+;; Настройки company-mode для telega
+(setq telega-emoji-company-backend 'telega-company-emoji)
+
+(defun my-telega-chat-mode ()
+  (set (make-local-variable 'company-backends)
+       (append (list telega-emoji-company-backend
+                   'telega-company-username
+                   'telega-company-hashtag)
+             (when (telega-chat-bot-p telega-chatbuf--chat)
+               '(telega-company-botcmd))))
+  (company-mode 1))
+
+(add-hook 'telega-chat-mode-hook 'my-telega-chat-mode)
