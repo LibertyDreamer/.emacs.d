@@ -32,21 +32,54 @@
     (when (not (package-installed-p p))
       (package-install p))))
 
+;Добавим путь к пакетам которых нет в melpa
+(add-to-list 'load-path "~/.emacs.d/melpa-not-yet-package-NOT-DELETE-THIS")
+
 ;;Настройки котика
 (require 'nyan-mode)
 (setq nyan-animate-nyancat t) ;; Анимация котика t/nul(да/нет)
 (setq nyan-wavy-trail t)
 (nyan-mode 1) ;;Загрузить котика
 
+;; Настройки лигатур
+(when (window-system)
+  (set-frame-font "Fira Code"))
+(let ((alist '((33 . ".\\(?:\\(?:==\\|!!\\)\\|[!=]\\)")
+               (35 . ".\\(?:###\\|##\\|_(\\|[#(?[_{]\\)")
+               (36 . ".\\(?:>\\)")
+               (37 . ".\\(?:\\(?:%%\\)\\|%\\)")
+               (38 . ".\\(?:\\(?:&&\\)\\|&\\)")
+               (42 . ".\\(?:\\(?:\\*\\*/\\)\\|\\(?:\\*[*/]\\)\\|[*/>]\\)")
+               (43 . ".\\(?:\\(?:\\+\\+\\)\\|[+>]\\)")
+               (45 . ".\\(?:\\(?:-[>-]\\|<<\\|>>\\)\\|[<>}~-]\\)")
+               (46 . ".\\(?:\\(?:\\.[.<]\\)\\|[.=-]\\)")
+               (47 . ".\\(?:\\(?:\\*\\*\\|//\\|==\\)\\|[*/=>]\\)")
+               (48 . ".\\(?:x[a-zA-Z]\\)")
+               (58 . ".\\(?:::\\|[:=]\\)")
+               (59 . ".\\(?:;;\\|;\\)")
+               (60 . ".\\(?:\\(?:!--\\)\\|\\(?:~~\\|->\\|\\$>\\|\\*>\\|\\+>\\|--\\|<[<=-]\\|=[<=>]\\||>\\)\\|[*$+~/<=>|-]\\)")
+               (61 . ".\\(?:\\(?:/=\\|:=\\|<<\\|=[=>]\\|>>\\)\\|[<=>~]\\)")
+               (62 . ".\\(?:\\(?:=>\\|>[=>-]\\)\\|[=>-]\\)")
+               (63 . ".\\(?:\\(\\?\\?\\)\\|[:=?]\\)")
+               (91 . ".\\(?:]\\)")
+               (92 . ".\\(?:\\(?:\\\\\\\\\\)\\|\\\\\\)")
+               (94 . ".\\(?:=\\)")
+               (119 . ".\\(?:ww\\)")
+               (123 . ".\\(?:-\\)")
+               (124 . ".\\(?:\\(?:|[=|]\\)\\|[=>|]\\)")
+               (126 . ".\\(?:~>\\|~~\\|[>=@~-]\\)")
+               )
+             ))
+  (dolist (char-regexp alist)
+    (set-char-table-range composition-function-table (car char-regexp)
+                          `([,(cdr char-regexp) 0 font-shape-gstring]))))
+
 ;;Настройки HELM
 (global-set-key (kbd "M-x") 'helm-M-x)
 (setq-default helm-M-x-fuzzy-match t)
 
-;;загрузить пакет meme такая срань так как его нет в melpa
-(add-to-list 'load-path "~/.emacs.d/melpa-not-yet-package-NOT-DELETE-THIS")
+;;загрузить пакет meme молочник не принес
 (require 'meme)
-(autoload 'meme "meme.el" "Create a meme from a collection" t)
-(autoload 'meme-file "meme.el" "Create a meme from a file" t)
 
 ;; Настройки google-translate
 (setq google-translate-default-source-language "en")
@@ -57,10 +90,6 @@
 
 ;;Настройки rainbow-delimiters (подсветка скобок)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
-
-;; Настройки Cmake-mode
-(setq load-path (cons (expand-file-name "/dir/with/cmake-mode") load-path))
-(require 'cmake-mode)
 
 ;; Настройки company-mode для telega
 (setq telega-emoji-company-backend 'telega-company-emoji)

@@ -10,12 +10,11 @@
 ;;отображать номера строк слева
 (global-linum-mode 1)
 
-; Добавить папку  с темами
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
-
 ; Установить тему по умолчанию
 (load-theme 'spacemacs-dark t)
 
 ;;установить прозрачност (set-frame-parameter (selected-frame) 'alpha '(<active> . <inactive>)) ь
 ;(set-frame-parameter (selected-frame) 'alpha '(85 . 10))
 
+;;Установить шрифт
+(set-frame-font "Fira Code 10" nil t)
