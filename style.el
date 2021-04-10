@@ -2,7 +2,7 @@
 (setq inhibit-splash-screen t)
 
 ;;копировать вставить панелька  включен
-(tool-bar-mode 1)
+(tool-bar-mode 0)
 
 ;;файл открыть сохранить панелька  отключен
 (menu-bar-mode 0)
