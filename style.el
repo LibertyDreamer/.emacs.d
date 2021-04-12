@@ -15,6 +15,3 @@
 
 ;;установить прозрачност (set-frame-parameter (selected-frame) 'alpha '(<active> . <inactive>)) ь
 ;(set-frame-parameter (selected-frame) 'alpha '(85 . 10))
-
-;;Установить шрифт
-(set-frame-font "Fira Code 10" nil t)
