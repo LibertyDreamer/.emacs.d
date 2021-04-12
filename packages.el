@@ -10,7 +10,7 @@
         ("MELPA"        . 0)))
 
 (package-initialize)
-(package-refresh-contents t)
+(package-refresh-contents)
 
 ;; Comment out if you've already loaded this package...
 (require 'cl-lib)
