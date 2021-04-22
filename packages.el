@@ -2,10 +2,10 @@
 (require 'package)
 (setq package-archives
       '(("GNU ELPA"     . "https://elpa.gnu.org/packages/")
-       ;; ("MELPA Stable" . "https://stable.melpa.org/packages/")
+        ("MELPA Stable" . "https://stable.melpa.org/packages/")
         ("MELPA"        . "https://melpa.org/packages/"))
       package-archive-priorities
-      '(;;("MELPA Stable" . 10)
+      '(("MELPA Stable" . 10)
         ("GNU ELPA"     . 5)
         ("MELPA"        . 0)))
 
@@ -15,8 +15,11 @@
 ;; Comment out if you've already loaded this package...
 (require 'cl-lib)
 
+;;Не работающие пакеты
+;;google-translate define-it
+
 (defvar my-packages ; <----------- PACKAGE HERE
-  '(nyan-mode spacemacs-theme google-translate define-it telega helm neotree rainbow-delimiters company)
+  '(nyan-mode spacemacs-theme telega helm neotree company org-mind-map)
   "A list of packages to ensure are installed at launch.")
 
 (defun my-packages-installed-p ()
