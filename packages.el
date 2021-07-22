@@ -1,3 +1,4 @@
+(setq package-check-signature nil)
 ;установить репозиторий melpa
 (require 'package)
 (setq package-archives
@@ -5,28 +6,20 @@
         ("MELPA Stable" . "https://stable.melpa.org/packages/")
         ("MELPA"        . "https://melpa.org/packages/"))
       package-archive-priorities
-      '(("MELPA Stable" . 10)
+      '(("MELPA Stable" . 0)
         ("GNU ELPA"     . 5)
-        ("MELPA"        . 0)))
+        ("MELPA"        . 10)))
 
 (package-initialize)
 (package-refresh-contents t)
 
-;; Comment out if you've already loaded this package...
-(require 'cl-lib)
-
-;;Не работающие пакеты
-;;google-translate define-it
-
-(defvar my-packages ; <----------- PACKAGE HERE
-  '(nyan-mode spacemacs-theme telega helm neotree company org-mind-map)
+(defvar my-packages 			
+  '(dracula-theme irony company company-irony flycheck-irony)
   "A list of packages to ensure are installed at launch.")
-
 (defun my-packages-installed-p ()
   (cl-loop for p in my-packages
            when (not (package-installed-p p)) do (cl-return nil)
            finally (cl-return t)))
-
 (unless (my-packages-installed-p)
   ;; check for new packages (package versions)
   (package-refresh-contents)
@@ -35,42 +28,25 @@
     (when (not (package-installed-p p))
       (package-install p))))
 
-;Добавим путь к пакетам которых нет в melpa
-(add-to-list 'load-path "~/.emacs.d/melpa-not-yet-package-NOT-DELETE-THIS")
+(add-hook 'c++-mode-hook 'irony-mode)
+(add-hook 'c-mode-hook 'irony-mode)
+(add-hook 'objc-mode-hook 'irony-mode)
 
-;;Настройки котика
-(require 'nyan-mode)
-(setq nyan-animate-nyancat t) ;; Анимация котика t/nul(да/нет)
-(setq nyan-wavy-trail t)
-(nyan-mode 1) ;;Загрузить котика
+(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 
-;;Настройки HELM
-(global-set-key (kbd "M-x") 'helm-M-x)
-(setq-default helm-M-x-fuzzy-match t)
+;; Windows performance tweaks
+(when (boundp 'w32-pipe-read-delay)
+  (setq w32-pipe-read-delay 0))
+;; Set the buffer size to 64K on Windows (from the original 4K)
+(when (boundp 'w32-pipe-buffer-size)
+  (setq irony-server-w32-pipe-buffer-size (* 64 1024)))
 
-;;загрузить пакет meme молочник не принес
-(require 'meme)
+(eval-after-load 'company
+  '(add-to-list 'company-backends 'company-irony))
 
-;; Настройки google-translate
-(setq google-translate-default-source-language "en")
-(setq google-translate-default-target-language "ru")
+(add-hook 'after-init-hook 'global-company-mode)
 
-;; Настройки define-it
-(setq define-it-output-choice 'pop)
+(eval-after-load 'company
+  '(add-to-list 'company-backends 'company-irony))
 
-;;Настройки rainbow-delimiters (подсветка скобок)
-(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
-
-;; Настройки company-mode для telega
-(setq telega-emoji-company-backend 'telega-company-emoji)
-
-(defun my-telega-chat-mode ()
-  (set (make-local-variable 'company-backends)
-       (append (list telega-emoji-company-backend
-                   'telega-company-username
-                   'telega-company-hashtag)
-             (when (telega-chat-bot-p telega-chatbuf--chat)
-               '(telega-company-botcmd))))
-  (company-mode 1))
-
-(add-hook 'telega-chat-mode-hook 'my-telega-chat-mode)
+(add-hook 'after-init-hook #'global-flycheck-mode)
