@@ -13,7 +13,7 @@
 (package-initialize)
 (package-refresh-contents t)
 
-(defvar my-packages 			
+(defvar my-packages          
   '(dracula-theme irony company company-irony flycheck-irony)
   "A list of packages to ensure are installed at launch.")
 (defun my-packages-installed-p ()
@@ -50,3 +50,7 @@
   '(add-to-list 'company-backends 'company-irony))
 
 (add-hook 'after-init-hook #'global-flycheck-mode)
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages '((C . t)))
+
