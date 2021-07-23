@@ -1,3 +1,4 @@
+;;; Code:
 (setq package-check-signature nil)
 ;установить репозиторий melpa
 (require 'package)
@@ -13,8 +14,8 @@
 (package-initialize)
 (package-refresh-contents t)
 
-(defvar my-packages          
-  '(dracula-theme irony company company-irony flycheck-irony)
+(defvar my-packages
+  '(dracula-theme irony company company-irony flycheck-irony neotree nyan-mode all-the-icons)
   "A list of packages to ensure are installed at launch.")
 (defun my-packages-installed-p ()
   (cl-loop for p in my-packages
@@ -31,15 +32,16 @@
 (add-hook 'c++-mode-hook 'irony-mode)
 (add-hook 'c-mode-hook 'irony-mode)
 (add-hook 'objc-mode-hook 'irony-mode)
+(add-hook 'org-mode-hook 'irony-mode)
 
 (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 
 ;; Windows performance tweaks
-(when (boundp 'w32-pipe-read-delay)
-  (setq w32-pipe-read-delay 0))
+;;(when (boundp 'w32-pipe-read-delay)
+;;  (setq w32-pipe-read-delay 0))
 ;; Set the buffer size to 64K on Windows (from the original 4K)
-(when (boundp 'w32-pipe-buffer-size)
-  (setq irony-server-w32-pipe-buffer-size (* 64 1024)))
+;;(when (boundp 'w32-pipe-buffer-size)
+;;  (setq irony-server-w32-pipe-buffer-size (* 64 1024)))
 
 (eval-after-load 'company
   '(add-to-list 'company-backends 'company-irony))
@@ -54,3 +56,10 @@
 (org-babel-do-load-languages
  'org-babel-load-languages '((C . t)))
 
+(neotree)
+
+(setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+
+(setq nyan-wavy-trail 't)
+(setq nyan-animate-nyancat 't)
+(nyan-mode 1)
