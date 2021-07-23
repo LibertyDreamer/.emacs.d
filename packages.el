@@ -15,7 +15,7 @@
 (package-refresh-contents t)
 
 (defvar my-packages
-  '(dracula-theme irony company company-irony flycheck-irony neotree nyan-mode all-the-icons)
+  '(dracula-theme irony company company-irony flycheck-irony cmake-mode neotree nyan-mode all-the-icons helm define-it)
   "A list of packages to ensure are installed at launch.")
 (defun my-packages-installed-p ()
   (cl-loop for p in my-packages
@@ -32,7 +32,7 @@
 (add-hook 'c++-mode-hook 'irony-mode)
 (add-hook 'c-mode-hook 'irony-mode)
 (add-hook 'objc-mode-hook 'irony-mode)
-(add-hook 'org-mode-hook 'irony-mode)
+;;(add-hook 'org-mode-hook 'irony-mode)
 
 (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 
@@ -55,11 +55,30 @@
 
 (org-babel-do-load-languages
  'org-babel-load-languages '((C . t)))
+(add-hook 'after-save-hook 'org-babel-tangle)
 
-(neotree)
 
 (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+(setq-default neo-show-hidden-files t)
+(neotree)
 
+;;Настройки nyan mode
 (setq nyan-wavy-trail 't)
 (setq nyan-animate-nyancat 't)
 (nyan-mode 1)
+
+
+;;Настройки HELM
+(global-set-key (kbd "M-x") 'helm-M-x)
+(setq-default helm-M-x-fuzzy-match t)
+
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
+
+;; Настройки define-it
+(setq define-it-output-choice 'pop)
+;;Нажатие на F5 в файле cmake org
+;;cpp c h hpp вызывает сохранение всех файлов c указанными расширениями и запуск компиляции.
+;;так же запуск отладчика
