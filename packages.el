@@ -15,7 +15,7 @@
 (package-refresh-contents t)
 
 (defvar my-packages
-  '(dracula-theme irony company company-irony flycheck-irony cmake-mode neotree nyan-mode all-the-icons helm define-it)
+  '(dracula-theme irony company company-irony flycheck-irony cmake-mode neotree nyan-mode all-the-icons helm define-it telega)
   "A list of packages to ensure are installed at launch.")
 (defun my-packages-installed-p ()
   (cl-loop for p in my-packages
@@ -28,6 +28,11 @@
   (dolist (p my-packages)
     (when (not (package-installed-p p))
       (package-install p))))
+
+;;Настройки nyan-mode
+(defvar nyan-wavy-trail 't)
+(defvar nyan-animate-nyancat 't)
+(nyan-mode 1)
 
 (add-hook 'c++-mode-hook 'irony-mode)
 (add-hook 'c-mode-hook 'irony-mode)
@@ -61,12 +66,6 @@
 (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
 (setq-default neo-show-hidden-files t)
 (neotree)
-
-;;Настройки nyan mode
-(setq nyan-wavy-trail 't)
-(setq nyan-animate-nyancat 't)
-(nyan-mode 1)
-
 
 ;;Настройки HELM
 (global-set-key (kbd "M-x") 'helm-M-x)

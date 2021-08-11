@@ -3,3 +3,4 @@
 /elpa/*
 /xkcd/*
 /request/*
+irony/bin/irony-server
