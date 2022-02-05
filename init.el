@@ -21,6 +21,8 @@
 ;;; пакеты из основного репозитория.
 (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
 (add-to-list 'package-archives '("melpa"        . "http://melpa.org/packages/"))
+
+
 (setq package-enable-at-startup nil)
 (package-initialize nil)
 
@@ -44,14 +46,11 @@
 
 (load-plugins (directory-files ".emacs.d/plugins" t ".el"))
 
-
 ;;; А здесь EMACS хранит настройки, задаваемые через customize
 (setq custom-file "~/.emacs.d/customize.el")
 (load-file custom-file)
 
-
 ;;Настраиваем экран приветствия
-
 ;(add-hook 'emacs-startup-hook 'my-startup-fcn)
 ;(defun my-startup-fcn ()
 ;  "do fancy things"
