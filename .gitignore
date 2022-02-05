@@ -5,3 +5,7 @@
 /request/*
 irony/bin/irony-server
 .DS_Store
+/.cache/
+/transient/
+/#init.el#
+/backup/

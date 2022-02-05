@@ -3,11 +3,8 @@
 ;;; Main EMACS settings file, load settings from parts.
 
 ;;; Code:
-;:Убираем приветственный экран 
-(setq inhibit-startup-screen t)
-
 (defun set-user-info (name mail-address)
-	"Установить имя пользователя и мыло"
+	"Установить name пользователя и mail"
 	(interactive "p")
 	(setq user-full-name name)
 	(setq user-mail-address mail-address))
@@ -21,6 +18,7 @@
 ;;; пакеты из основного репозитория.
 (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
 (add-to-list 'package-archives '("melpa"        . "http://melpa.org/packages/"))
+
 (setq package-enable-at-startup nil)
 (package-initialize nil)
 
@@ -43,31 +41,18 @@
     (setq list (cdr list))))
 
 (load-plugins (directory-files ".emacs.d/plugins" t ".el"))
+(load-plugins (directory-files ".emacs.d/plugins/mouse" t ".el"))
+(load-plugins (directory-files ".emacs.d/plugins/other" t ".el"))
+(load-plugins (directory-files ".emacs.d/plugins/visual" t ".el"))
+(load-plugins (directory-files ".emacs.d/plugins/natural-language" t ".el"))
+(load-plugins (directory-files ".emacs.d/plugins/programming-language" t ".el"))
 
 
 ;;; А здесь EMACS хранит настройки, задаваемые через customize
 (setq custom-file "~/.emacs.d/customize.el")
 (load-file custom-file)
 
+;;; Папка для хранения бэкапов
+(setq backup-directory-alist `(("." . "~/.emacs.d/backup")))
 
-;;Настраиваем экран приветствия
-
-;(add-hook 'emacs-startup-hook 'my-startup-fcn)
-;(defun my-startup-fcn ()
-;  "do fancy things"
-;  (let ((my-buffer (get-buffer-create "my-buffer")))
-;    (with-current-buffer my-buffer
-      ;; this is what you customize
-;      (insert "some stuff\nmore stuff"))
-;    (switch-to-buffer my-buffer)))
-
-;;копировать вставить панелька  выключено
-(tool-bar-mode 0)
-;;файл открыть сохранить панелька  отключен
-(menu-bar-mode 0)
-;;отображать номера строк в программистском режиме слева
-(add-hook 'prog-mode-hook 'linum-mode)
-;;установить прозрачност (set-frame-parameter (selected-frame) 'alpha '(<active> . <inactive>)) 
-(set-frame-parameter (selected-frame) 'alpha '(95 . 70))
-
-;;; .emacs ends here
+;;; init.el ends here
