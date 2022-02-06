@@ -1,6 +1,8 @@
 ;:; Убираем приветственный экран
 (setq inhibit-startup-screen t)
 
+
+(setq-default line-number-mode nil)
 ;;копировать вставить панелька  отключено
 (tool-bar-mode 0)
 ;;файл открыть сохранить панелька  отключен

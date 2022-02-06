@@ -47,12 +47,13 @@
 (load-plugins (directory-files ".emacs.d/plugins/natural-language" t ".el"))
 (load-plugins (directory-files ".emacs.d/plugins/programming-language" t ".el"))
 
-
 ;;; А здесь EMACS хранит настройки, задаваемые через customize
 (setq custom-file "~/.emacs.d/customize.el")
 (load-file custom-file)
+
 
 ;;; Папка для хранения бэкапов
 (setq backup-directory-alist `(("." . "~/.emacs.d/backup")))
 
 ;;; init.el ends here
+
