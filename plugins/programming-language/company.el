@@ -1,6 +1,5 @@
 (use-package company)
 
-
 ;;; Аннотация - это строка, которая содержит дополнительную информацию о кандидате;
 ;;; например, тип данных, аргументы функции или то, что серверная часть назначает ценной
 ;;; информацией о кандидате.
@@ -19,5 +18,6 @@
 ;;; не отображаемых текущей страницей всплывающей подсказки.
 (setq company-tooltip-offset-display 'lines)
 
-(setq company-format-margin-function #'company-vscode-light-icons-margin)
+(setq-default company-format-margin-function 'company-vscode-light-icons-margin)
 
+;;; company.el ends here

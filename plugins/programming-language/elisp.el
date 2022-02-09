@@ -5,5 +5,4 @@
 	  (lambda()
 	    (company-mode 1)
 	    (rainbow-delimiters-mode 1)
-	    (flycheck-mode 1)
-	    ))
+	    (flycheck-mode 1)))

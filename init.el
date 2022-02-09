@@ -4,7 +4,7 @@
 
 ;;; Code:
 (defun set-user-info (name mail-address)
-	"Установить name пользователя и mail"
+	"Установить NAME пользователя и MAIL-ADDRESS."
 	(interactive "p")
 	(setq user-full-name name)
 	(setq user-mail-address mail-address))
@@ -36,16 +36,13 @@
 
 ;;; Части конфигурации. Загрузит все конфигурации-плагины из папки plugins.
 (defun load-plugins (list)
+  "LIST список содержащий полные пути до файлов загрузки-конфигурирования плагинов."
   (while list
     (load-file (car list))
     (setq list (cdr list))))
 
-(load-plugins (directory-files ".emacs.d/plugins" t ".el"))
-(load-plugins (directory-files ".emacs.d/plugins/mouse" t ".el"))
-(load-plugins (directory-files ".emacs.d/plugins/other" t ".el"))
-(load-plugins (directory-files ".emacs.d/plugins/visual" t ".el"))
-(load-plugins (directory-files ".emacs.d/plugins/natural-language" t ".el"))
-(load-plugins (directory-files ".emacs.d/plugins/programming-language" t ".el"))
+
+(load-plugins (directory-files-recursively "~/.emacs.d/plugins" "\.el$"))
 
 ;;; А здесь EMACS хранит настройки, задаваемые через customize
 (setq custom-file "~/.emacs.d/customize.el")
@@ -56,4 +53,3 @@
 (setq backup-directory-alist `(("." . "~/.emacs.d/backup")))
 
 ;;; init.el ends here
-

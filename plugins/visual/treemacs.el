@@ -58,7 +58,7 @@
 
     ;; The default width and height of the icons is 22 pixels. If you are
     ;; using a Hi-DPI display, uncomment this to double the icon size.
-    ;;(treemacs-resize-icons 44)
+    ;;(treemacs-resize-icons 30)
 
     (treemacs-follow-mode t)
     (treemacs-filewatch-mode t)
@@ -103,4 +103,13 @@
   :ensure t
   :config (treemacs-set-scope-type 'Perspectives))
 
+;;; Использовать 1 щелчок мыши вместо двух
+(with-eval-after-load 'treemacs
+  (define-key treemacs-mode-map [mouse-1] #'treemacs-single-click-expand-action))
+
+(use-package treemacs-all-the-icons)
+(treemacs-load-theme "all-the-icons")
+
 (treemacs)
+
+;; treemacs.el ends here

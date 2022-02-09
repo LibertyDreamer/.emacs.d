@@ -16,15 +16,15 @@
                        (consp buffer-undo-list)))
             :keys "")
       
-      (separator-undo menu-item "--")
+      (separator-0 menu-item "--")
 
        (comment menu-item "Comment/Uncomment" comment-dwim
            :enable (use-region-p)
-           :keys "")
+           :keys "M-;")
       
       (cut menu-item "Cut" clipboard-kill-region
            :enable (use-region-p)
-           :keys "")
+           :keys "C-w")
 
       ;; (copy-link menu-item "Copy Link" 
       ;;            (lambda () (interactive) (kill-new (url-get-url-at-point)))
@@ -34,9 +34,10 @@
       
       (copy menu-item "Copy" clipboard-kill-ring-save
             :enable (use-region-p)
-            :keys "")
+            :keys "M-w")
       (paste menu-item "Paste" clipboard-yank
-             :keys "")
+             ;; :keys "C-y"
+	     )
       (paste-from-menu menu-item "Paste from Kill Menu" yank-menu
                        :enable (and
                                 (cdr yank-menu)
@@ -50,13 +51,18 @@
   (mark-whole-buffer menu-item "Select All" mark-whole-buffer
                          :enable (not (= (buffer-size) 0)))
       
-      (separator-utility menu-item "--")
+      (separator-1 menu-item "--")
 
       (open-undo-tree-visualize menu-item "Open undo tree" undo-tree-visualize
 				:keys "")
       
       (kill-buffer menu-item "Kill buffer" (lambda () (interactive) (kill-buffer (current-buffer)))
 		   :keys "")
+       (show-buffers menu-item "Show all buffers" (lambda () (interactive) (ibuffer))
+		   :keys "")
+
+      (separator-2 menu-item "--")
+      (magit-status menu-item "Magit-status" magit-status)
       
      ))
 
