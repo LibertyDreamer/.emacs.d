@@ -9,3 +9,7 @@ irony/bin/irony-server
 /transient/
 /#init.el#
 /backup/
+/recentf
+/url/
+/projectile-bookmarks.eld
+/bookmarks
