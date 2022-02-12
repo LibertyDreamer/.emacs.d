@@ -1,3 +1,3 @@
-(use-package pomodoro)
-
-(pomodoro-add-to-mode-line)
+(use-package pomodoro
+  :config
+  (pomodoro-add-to-mode-line))

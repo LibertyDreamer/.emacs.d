@@ -5,7 +5,19 @@
 
   (defvar edit-popup-menu
     '(keymap
-      (undo menu-item "Undo" undo
+     
+
+      (find-function menu-item "Find function" find-function )
+      (describe-function menu-item "Describe function" describe-function)
+      (function-reference menu-item "Function reference" xref-find-references)
+      
+      
+      (separator-0 menu-item "--")
+
+      (comment menu-item "Comment/Uncomment" comment-dwim
+           :enable (use-region-p)
+           :keys "M-;")
+       (undo menu-item "Undo" undo
             :enable (and
                      (not buffer-read-only)
                      (not
@@ -15,22 +27,14 @@
                          (listp pending-undo-list)
                        (consp buffer-undo-list)))
             :keys "")
-      
-      (separator-0 menu-item "--")
-
-       (comment menu-item "Comment/Uncomment" comment-dwim
-           :enable (use-region-p)
-           :keys "M-;")
-      
+       
       (cut menu-item "Cut" clipboard-kill-region
-           :enable (use-region-p)
+           :enable ((use-region-p)
+		    (not buffer-read-only))
+		    
            :keys "C-w")
 
-      ;; (copy-link menu-item "Copy Link" 
-      ;;            (lambda () (interactive) (kill-new (url-get-url-at-point)))
-      ;;       :enable (and (url-get-url-at-point))
-      ;;       :keys "")
-      
+ 
       
       (copy menu-item "Copy" clipboard-kill-ring-save
             :enable (use-region-p)
@@ -50,7 +54,13 @@
 
   (mark-whole-buffer menu-item "Select All" mark-whole-buffer
                          :enable (not (= (buffer-size) 0)))
-      
+
+  (separator-3 menu-item "--")
+  
+  (translate-it menu-item "Translate it"  (lambda () (interactive) (condition-case google-translate-at-point
+							 (google-translate-buffer)
+						        (error nil))))
+  
       (separator-1 menu-item "--")
 
       (open-undo-tree-visualize menu-item "Open undo tree" undo-tree-visualize

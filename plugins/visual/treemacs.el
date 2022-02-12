@@ -110,6 +110,9 @@
 (use-package treemacs-all-the-icons)
 (treemacs-load-theme "all-the-icons")
 
+
+(use-package treemacs-projectile)
+
 (treemacs)
 
 ;; treemacs.el ends here

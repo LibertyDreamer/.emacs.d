@@ -1,6 +1,6 @@
 ;;; package --- Summary
 ;;; Commentary:
-;;; Main EMACS settings file, load settings from parts.
+;;;  EMACS settings file, load settings from parts.
 
 ;;; Code:
 (defun set-user-info (name mail-address)
