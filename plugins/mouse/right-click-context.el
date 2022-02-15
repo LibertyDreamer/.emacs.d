@@ -29,7 +29,7 @@
             :keys "")
        
       (cut menu-item "Cut" clipboard-kill-region
-           :enable ((use-region-p)
+           :enable (and (use-region-p)
 		    (not buffer-read-only))
 		    
            :keys "C-w")
@@ -79,6 +79,7 @@
   (defun my-context-menu (event)
     "Pop up a context menu."
     (interactive "e")
+    (mouse-set-point event)
     (popup-menu edit-popup-menu)))
 
 (provide 'context-menu)
