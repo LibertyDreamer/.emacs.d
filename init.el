@@ -48,7 +48,11 @@
 (setq custom-file "~/.emacs.d/customize.el")
 (load-file custom-file)
 
-
+;;(setq make-backup-files         nil) ; Don't want any backup files
+;;; Don't want any .saves files
+;;; (setq auto-save-list-file-name  nil)
+;;; Don't want any auto
+;;; (setq auto-save-default         nil)
 ;;; Папка для хранения бэкапов
 (setq backup-directory-alist `(("." . "~/.emacs.d/backup")))
 

@@ -5,16 +5,12 @@
 ;;(setq inhibit-startup-screen t)
 
 
-(setq-default global-line-number-mode nil)
-;;отображать номера строк в программистском режиме слева
-(add-hook 'prog-mode-hook 'linum-mode)
-
 ;;копировать вставить панелька  отключено
 (tool-bar-mode 0)
 ;;файл открыть сохранить панелька  отключен
-(menu-bar-mode 0)
+(menu-bar-mode 1)
 ;; Скрыть скроллбар
-(scroll-bar-mode -1)
+(scroll-bar-mode 0)
 
 ;;; Установить прозрачност (set-frame-parameter (selected-frame) 'alpha '(<active> . <inactive>))
 (set-frame-parameter (selected-frame) 'alpha '(95 . 70))

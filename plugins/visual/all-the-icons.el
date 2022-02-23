@@ -15,5 +15,4 @@
   (if (not (find-font (font-spec :name "all-the-icons")))
     (all-the-icons-install-fonts t)))
 
-
 ;;; all-the-icons.el ends here

@@ -1,4 +1,4 @@
-(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+;;(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 
 (use-package dashboard
   :ensure t
