@@ -13,7 +13,7 @@
 (scroll-bar-mode 0)
 
 ;;; Установить прозрачност (set-frame-parameter (selected-frame) 'alpha '(<active> . <inactive>))
-(set-frame-parameter (selected-frame) 'alpha '(95 . 70))
+(set-frame-parameter (selected-frame) 'alpha '(99 . 90))
                                                                             
 ;; Удалять выделенный текст при начале письма как во всех остальных редакторах
 (delete-selection-mode 1)

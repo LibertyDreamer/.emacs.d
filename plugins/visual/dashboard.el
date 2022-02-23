@@ -5,3 +5,6 @@
   :config
   (dashboard-setup-startup-hook))
 ;;; dashboard.el ends here
+
+
+(setq dashboard-startup-banner "~/.emacs.d/dashboard-image/marivector.png")
