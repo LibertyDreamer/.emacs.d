@@ -112,4 +112,5 @@
   :ensure t
   :config (treemacs-set-scope-type 'Tabs))
 
+(treemacs)
 ;;; treemacs.el ends here
