@@ -14,3 +14,6 @@ irony/bin/irony-server
 /projectile-bookmarks.eld
 /bookmarks
 /recentf~
+/plugins/utilities/#undo-tree.el#
+/plugins/visual/#all-the-icons.el#
+/plugins/visual/#tabbar.el#
