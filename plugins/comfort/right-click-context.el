@@ -82,7 +82,7 @@
   (defun my-context-menu (event)
     "Pop up a context menu."
     (interactive "e")
-    (mouse-set-point event) ;;TODO: из за этого возник баг например при попытке вызвать коммент анкоммента
+    ;;(mouse-set-point event) ;;TODO: из за этого возник баг например при попытке вызвать коммент анкоммента
     (popup-menu edit-popup-menu)))
 
 (provide 'context-menu)

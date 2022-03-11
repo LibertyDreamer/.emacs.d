@@ -17,3 +17,4 @@ irony/bin/irony-server
 /plugins/utilities/#undo-tree.el#
 /plugins/visual/#all-the-icons.el#
 /plugins/visual/#tabbar.el#
+/plugins/programming-language/flycheck_elisp.el
