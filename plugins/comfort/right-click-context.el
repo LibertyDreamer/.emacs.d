@@ -1,8 +1,14 @@
 (global-set-key [mouse-3] 'my-context-menu)
 
+(defun translate ()
+  "Перевести используя гугл переводчик, если что то выбрано переведет выбранное если нет всю страницу."
+  (interactive)
+  (condition-case google-translate-at-point
+      (google-translate-buffer)
+    (error nil)))
+
 (with-eval-after-load "menu-bar"
   (require 'url-util)
-
   (defvar edit-popup-menu
     '(keymap
      
@@ -10,7 +16,6 @@
       (find-function menu-item "Find function" find-function )
       (describe-function menu-item "Describe function" describe-function)
       (function-reference menu-item "Function reference" xref-find-references)
-      
       
       (separator-0 menu-item "--")
 
@@ -57,9 +62,7 @@
 
   (separator-3 menu-item "--")
   
-  (translate-it menu-item "Translate it"  (lambda () (interactive) (condition-case google-translate-at-point
-							 (google-translate-buffer)
-						        (error nil))))
+  (translate-it menu-item "Translate it" translate)
   
       (separator-1 menu-item "--")
 
@@ -79,7 +82,7 @@
   (defun my-context-menu (event)
     "Pop up a context menu."
     (interactive "e")
-    (mouse-set-point event) ;;TODO: из за этого возник баг например при попытке вызвать коммент анкоммента
+    ;;(mouse-set-point event) ;;TODO: из за этого возник баг например при попытке вызвать коммент анкоммента
     (popup-menu edit-popup-menu)))
 
 (provide 'context-menu)

@@ -11,7 +11,7 @@
 (use-package all-the-icons
   :if (display-graphic-p)
   :init
-  ;;Если шрифт all-the-icons не найдет установим его
+  ;;Если шрифт all-the-icons не найден установим его
   (if (not (find-font (font-spec :name "all-the-icons")))
     (all-the-icons-install-fonts t)))
 

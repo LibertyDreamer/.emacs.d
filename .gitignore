@@ -16,3 +16,7 @@ irony/bin/irony-server
 /recentf~
 /plugins/visual/#dashboard.el#
 /plugins/visual/.#tabbar.el
+/plugins/utilities/#undo-tree.el#
+/plugins/visual/#all-the-icons.el#
+/plugins/visual/#tabbar.el#
+/plugins/programming-language/flycheck_elisp.el

@@ -43,7 +43,7 @@
           treemacs-show-cursor                     nil
           treemacs-show-hidden-files               t
           treemacs-silent-filewatch                nil
-          treemacs-silent-refresh                  nil
+          treemacs-silent-refresh                  t
           treemacs-sorting                         'alphabetic-asc
           treemacs-select-when-already-in-treemacs 'move-back
           treemacs-space-between-root-nodes        t
@@ -113,4 +113,5 @@
   :config (treemacs-set-scope-type 'Tabs))
 
 (treemacs)
+(treemacs-toggle-fixed-width)
 ;;; treemacs.el ends here

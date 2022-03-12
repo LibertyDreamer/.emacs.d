@@ -1,2 +1,0 @@
-;(use-package cmake-ide)
-

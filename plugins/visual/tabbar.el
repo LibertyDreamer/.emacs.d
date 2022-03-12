@@ -51,4 +51,3 @@
 ;;                        (length (tabbar-view
 ;;                                 (tabbar-current-tabset)))))))))
 
-(tabbar-mode 1)

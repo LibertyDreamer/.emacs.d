@@ -4,6 +4,14 @@
 ;:; Убираем приветственный экран
 ;;(setq inhibit-startup-screen t)
 
+(use-package cua-base
+  :config (cua-mode))
+(setq cua-auto-tabify-rectangles nil) ;; Don't tabify after rectangle commands
+(transient-mark-mode 1) ;; No region when it is not highlighted
+(setq cua-keep-region-after-copy t) ;; Standard Windows behaviour
+
+;; Включим отладку
+(setq debug-on-error t)
 
 ;;копировать вставить панелька  отключено
 (tool-bar-mode 0)
