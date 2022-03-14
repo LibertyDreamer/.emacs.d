@@ -10,6 +10,9 @@
 (transient-mark-mode 1) ;; No region when it is not highlighted
 (setq cua-keep-region-after-copy t) ;; Standard Windows behaviour
 
+
+(setq-default linum-format "%4d \u2502")
+
 ;; Включим отладку
 (setq debug-on-error t)
 

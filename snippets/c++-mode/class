@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: class
+# key: class
+# --
+
+class $0 {
+    public:
+
+    private:
+
+    protected:
+};
