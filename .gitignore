@@ -20,3 +20,4 @@ irony/bin/irony-server
 /plugins/visual/#all-the-icons.el#
 /plugins/visual/#tabbar.el#
 /plugins/programming-language/flycheck_elisp.el
+/server/
