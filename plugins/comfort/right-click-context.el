@@ -12,7 +12,6 @@
   (defvar edit-popup-menu
     '(keymap
      
-
       (find-function menu-item "Find function" find-function )
       (describe-function menu-item "Describe function" describe-function)
       (function-reference menu-item "Function reference" xref-find-references)
@@ -72,7 +71,10 @@
       (kill-buffer menu-item "Kill buffer" (lambda () (interactive) (kill-buffer (current-buffer)))
 		   :keys "")
        (show-buffers menu-item "Show all buffers" (lambda () (interactive) (ibuffer))
-		   :keys "")
+		     :keys "")
+
+       (tear-off-window menu-item "Tear off window" tear-off-window )
+			
 
       (separator-2 menu-item "--")
       (magit-status menu-item "Magit-status" magit-status)
