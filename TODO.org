@@ -7,3 +7,4 @@
 
   3. МБ помогает и это https://stackoverflow.com/questions/43976371/artist-mode-drawing-characters-disorder
      (add-hook 'artist-mode-hook (lambda () (setq indent-tabs-mode nil)))
+* TODO dashboard должен показываться на весь экран при старте

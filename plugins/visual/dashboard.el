@@ -7,10 +7,11 @@
 
 (setq dashboard-startup-banner "~/.emacs.d/dashboard-image/marivector.png")
 
-(add-hook 'dashboard-mode-hook
-	  (lambda ()
-	    (delete-other-windows)
-	    )
-	  )
+;; Вызывет ошибку при старте
+;; (add-hook 'dashboard-mode-hook
+;; 	  (lambda ()
+;; 	    (delete-other-windows)
+;; 	    )
+;; 	  )
 
 ;;; dashboard.el ends here
