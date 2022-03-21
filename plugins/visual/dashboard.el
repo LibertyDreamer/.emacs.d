@@ -7,7 +7,8 @@
 
 (setq dashboard-startup-banner "~/.emacs.d/dashboard-image/marivector.png")
 
-;; Вызывет ошибку при старте
+
+;; TODO ERROR: баг ломает запуск на маке
 ;; (add-hook 'dashboard-mode-hook
 ;; 	  (lambda ()
 ;; 	    (delete-other-windows)

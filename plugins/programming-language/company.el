@@ -20,4 +20,10 @@
 
 (setq-default company-format-margin-function 'company-vscode-light-icons-margin)
 
+
+(use-package company-box
+  :hook (company-mode . company-box-mode))
+
+
+
 ;;; company.el ends here
