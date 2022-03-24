@@ -3,9 +3,10 @@
 (use-package dashboard
   :ensure t
   :config
+  (setq dashboard-startup-banner "~/.emacs.d/dashboard-image/marivector.png")
   (dashboard-setup-startup-hook))
 
-(setq dashboard-startup-banner "~/.emacs.d/dashboard-image/marivector.png")
+
 
 
 ;; TODO ERROR: баг ломает запуск на маке
