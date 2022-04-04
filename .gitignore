@@ -22,3 +22,4 @@ irony/bin/irony-server
 /plugins/programming-language/flycheck_elisp.el
 /server/
 /#CPP.org#
+/plugins/utilities/.undo-tree.el.~undo-tree~

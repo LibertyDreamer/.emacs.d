@@ -9,6 +9,7 @@
 ;;; Позволяет отобразить дерево изменений файла.
 (use-package undo-tree
   :config
+  (setq undo-tree-auto-save-history t)
   ;;; Использовать этот мод везде
   (global-undo-tree-mode))
 
