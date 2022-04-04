@@ -74,3 +74,34 @@ int main() {
 
 #+end_src
   
+* Инстанцирование шаблонов
+  // main.cpp
+#include "Templ.h"
+
+int main() {
+    Templ<int> templ(0);
+    Templ<float> templF(0.0f);
+    Templ<double> templD(0.0);
+    return 0;
+}
+
+// Templ.h
+#pragma once
+
+template <typename T>
+class Templ {
+public:
+    Templ(T t);
+private:
+    T x;
+};
+
+// Templ.cpp
+#include "Templ.h"
+
+template Templ<int>;
+template Templ<float>;
+
+template <typename T>
+Templ<T>::Templ(T t) : x(t) {
+}
