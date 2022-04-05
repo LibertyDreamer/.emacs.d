@@ -23,3 +23,5 @@ irony/bin/irony-server
 /server/
 /#CPP.org#
 /plugins/utilities/.undo-tree.el.~undo-tree~
+/.to-do-in-emacs.org.~undo-tree~
+/plugins/programming-language/.elisp.el.~undo-tree~
