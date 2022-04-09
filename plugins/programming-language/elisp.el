@@ -48,5 +48,3 @@
 
 (global-set-key [C-down-mouse-1] nil)
 ;; (global-set-key [C-mouse-1] 'elisp-find-function)
-
-

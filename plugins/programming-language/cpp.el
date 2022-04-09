@@ -10,6 +10,6 @@
 
 
 
-
-(setq company-clang-executable "c:/Program Files/LLVM/bin/clang.exe")
+;; windows only!!
+;;(setq company-clang-executable "c:/Program Files/LLVM/bin/clang.exe")
 

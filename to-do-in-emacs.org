@@ -4,4 +4,15 @@
   3) [ ] 
   
 * c++ [0/1]
-  1. [ ] faf
+  1. [ ] настроить автодополнение
+
+* Org-mode [0/1]
+   1. [ ] TODO Пофиксить проблему рисования artist в орг моде
+    Нужно окружать
+
+   https://stackoverflow.com/questions/41352871/how-to-write-text-inside-a-rectangle-in-emacs-artist-mode
+     'm surprised not to see overwrite-mode. This replaces text at point rather than inserting it.
+      People have mentioned untabify to change tabs to spaces. Use whitespace-mode to see where those tabs (and spaces) are.
+
+   МБ помогает и это https://stackoverflow.com/questions/43976371/artist-mode-drawing-characters-disorder
+     (add-hook 'artist-mode-hook (lambda () (setq indent-tabs-mode nil)))
