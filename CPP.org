@@ -10,3 +10,98 @@
 
 1. Классы
    1. Класс = тип. Его имя это имя-класса в пределах своей области.
+
+
+
+* Красивое memory mapped
+
+#+begin_src c++ :tangle yes
+#include <fcntl.h>
+#include <windows.h>
+
+#include <iostream>
+
+using namespace std;
+
+int main() {
+  // 0. Handle or create and handle file
+
+  auto file_path = "test";
+
+  HANDLE m_hFile = CreateFile(file_path, GENERIC_READ | GENERIC_WRITE, 0, NULL,
+                              OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+  if (m_hFile == INVALID_HANDLE_VALUE) {
+    if (GetLastError() == ERROR_FILE_NOT_FOUND) {
+      // m_hFile = createFile(file_path);
+    } else
+      throw GetLastError();
+  }
+
+  // 1. Create a file mapping object for the file
+  auto m_hMapFile =
+      CreateFileMapping(m_hFile, NULL, PAGE_READWRITE, 0, 0, NULL);
+  if (m_hMapFile == NULL) throw GetLastError();
+
+  // 2. Map the view.
+  auto m_lpMapAddress = MapViewOfFile(m_hMapFile, FILE_MAP_ALL_ACCESS, 0, 0, 0);
+  // to map
+  if (m_lpMapAddress == NULL) throw GetLastError();
+
+  unsigned char *mappedDataAsUChars = (unsigned char *)m_lpMapAddress;
+
+  const char str[] = "HELLO FILE!";
+
+  memcpy(mappedDataAsUChars, str, sizeof(str));
+
+  for (int k = 8; k < 16; k++)
+    std::cout << "Byte at " << k << " is " << mappedDataAsUChars[k]
+              << std::endl;
+
+  return 0;
+}
+
+struct A {
+  int a = 1, b, c, d;
+};
+
+int main() {
+  int four_[4] = {1, 2, 3, 4};
+
+  // A* ptr = new (&four_[0]) A();
+
+  A* ptr1 = reinterpret_cast<A*>(four_);
+  }
+
+#+end_src
+  
+* Инстанцирование шаблонов
+  // main.cpp
+#include "Templ.h"
+
+int main() {
+    Templ<int> templ(0);
+    Templ<float> templF(0.0f);
+    Templ<double> templD(0.0);
+    return 0;
+}
+
+// Templ.h
+#pragma once
+
+template <typename T>
+class Templ {
+public:
+    Templ(T t);
+private:
+    T x;
+};
+
+// Templ.cpp
+#include "Templ.h"
+
+template Templ<int>;
+template Templ<float>;
+
+template <typename T>
+Templ<T>::Templ(T t) : x(t) {
+}

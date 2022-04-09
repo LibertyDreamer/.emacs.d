@@ -24,7 +24,8 @@
 	    (show-paren-mode 1)
 	    (local-set-key [C-down-mouse-1] nil)
 	    (local-set-key [C-mouse-1] 'elisp-find-function)
-	    (smartparens-mode 1))
+	    ;; (smartparens-mode 1)
+	    )
 	  )
 
 (use-package pos-tip)

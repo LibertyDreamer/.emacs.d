@@ -9,7 +9,10 @@
 ;;; Позволяет отобразить дерево изменений файла.
 (use-package undo-tree
   :config
-  ;;; Использовать этот мод везде
+  ;;; Сохранять историю изменений для использования после
+  ;;; перезапуска emacs.
+  (setq undo-tree-auto-save-history t)
+  ;;; Использовать этот мод везде.
   (global-undo-tree-mode))
 
 ;;; undo-tree.el ends here

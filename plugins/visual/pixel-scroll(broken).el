@@ -1,6 +1,6 @@
 ;; скрол не работет нихрена
 
-;;(pixel-scroll-mode t)
+;; (pixel-scroll-mode t)
 
 
 ;; (setq pixel-wait 0.001)

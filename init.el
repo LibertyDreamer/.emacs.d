@@ -1,7 +1,7 @@
 ;;; package --- Summary
 ;;; Commentary:
 ;;;  EMACS settings file, load settings from parts.
-
+::::
 ;;; Code:
 (defun set-user-info (name mail-address)
 	"Установить NAME пользователя и MAIL-ADDRESS."
