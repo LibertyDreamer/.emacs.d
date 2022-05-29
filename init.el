@@ -1,7 +1,6 @@
 ;;; package --- Summary
 ;;; Commentary:
-;;;  EMACS settings file, load settings from parts.
-::::
+;;; EMACS settings file, load settings from parts.
 ;;; Code:
 (defun set-user-info (name mail-address)
 	"Установить NAME пользователя и MAIL-ADDRESS."
@@ -56,5 +55,4 @@
 ;;; (setq auto-save-default         nil)
 ;;; Папка для хранения бэкапов
 (setq backup-directory-alist `(("." . "~/.emacs.d/backup")))
-
 ;;; init.el ends here

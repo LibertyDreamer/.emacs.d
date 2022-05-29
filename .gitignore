@@ -25,3 +25,6 @@ irony/bin/irony-server
 /plugins/utilities/.undo-tree.el.~undo-tree~
 /.to-do-in-emacs.org.~undo-tree~
 /plugins/programming-language/.elisp.el.~undo-tree~
+*~undo-tree~
+/.litable-lists.el
+customize.el

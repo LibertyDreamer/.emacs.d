@@ -1,0 +1,18 @@
+* Конфигурация для emacs 
+
+* Настройка персональной информации
+  Первым делом хотелось бы создать и вызвать функцию для задания личной информации.
+  
+  *Кто я? Где я?*
+#+BEGIN_SRC emacs-lisp
+      (defun set-user-info (name mail-address)
+	     "Установить NAME пользователя и MAIL-ADDRESS."
+	     (interactive "sВведите ваше имя. \nsВведите адрес электронной почты. ")
+	     (setq user-full-name name)
+	     (setq user-mail-address mail-address))
+
+    (set-user-info "Никита" "nikitadotivanov64@gmail.com")
+#+END_SRC
+
+* Настройка =use-package=
+  Я использую =use-package= для управлениями своими пакетами. Потому настроим его.

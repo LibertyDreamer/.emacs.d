@@ -25,6 +25,7 @@
 	    (local-set-key [C-down-mouse-1] nil)
 	    (local-set-key [C-mouse-1] 'elisp-find-function)
 	    ;; (smartparens-mode 1)
+	    (litable-mode)
 	    )
 	  )
 
