@@ -1,0 +1,166 @@
+* What's this?
+This document is a literate version of my GNU Emacs configuration written in Org mode. Org mode is a kind of markdown with super powers.
+
+* Package managment
+
+We will create a function to add folders with plugins to the load-path list.
+#+begin_src emacs-lisp
+  (defun add-all-plugins-folder-to-load-path(list)
+    "LIST is list of full paths to folders with packages"
+    (while list
+      (add-to-list 'load-path (car list))
+      (setq list (cdr list))))
+#+end_src
+
+And we have created a interactive function for fast update plugins.
+The function calls the function, which uses the directory-files function to obtain full paths to folders with packages,
+excluding '.' and '..' due to the regular expression.
+And we call it after run.
+#+begin_src emacs-lisp
+  (defun update-plugins-list ()
+      (interactive)
+    (add-all-plugins-folder-to-load-path (directory-files "~/.emacs.d/packages" t "^[^.].*")))
+  
+  (update-plugins-list)
+#+end_src
+
+We will control packages' settings using =use-package=.
+We will install =bind-key= (we added it to packages folder and call the function for add it on previous step),
+which is a dependency for =use-package=.
+I think it's a cool utility that gives me the ability to do things like this:
+(bind-key "C-c x" 'my-ctrl-c-x-command).
+
+Good, now we can use =use-package= we could use MELPA repository but all the time I have anything troble with it
+And it's reason why I think manual install is better way.
+#+begin_src emacs-lisp
+  (require 'use-package)
+#+end_src
+
+Ok, main idea all of this is download package and put it into ~/.emacs.d/packages folder.
+Function add-all-plugins-folder-to-load-path will add all pacakges to load-path, and after that
+we will be able to use require, It means we will use package.
+
+* Startup
+
+Don’t show the startup message:
+#+begin_src emacs-lisp
+  (setq inhibit-startup-message t)
+#+end_src
+
+Set the encoding to UTF8:
+#+begin_src emacs-lisp
+  (prefer-coding-system 'utf-8)
+#+end_src
+
+* Aesthetics
+
+
+I want to have tab-bar
+#+begin_src emacs-lisp
+  ;;(use-package tabbar)
+  (tab-bar-mode t)
+#+end_src 
+
+#+begin_src emacs-lisp
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (menu-bar-mode -1)
+#+end_src
+
+#+begin_src emacs-lisp
+
+#+end_src
+
+
+* Old habbits
+It makes my happy. Activates standart keybindings ctr-c ctrl-v ctrl-z.
+#+begin_src emacs-lisp
+(cua-mode t)
+(setq cua-keep-region-after-copy t)
+#+end_src
+
+Whenever we use the 'paste' function or only write, the selected area is deleted.
+#+begin_src emacs-lisp
+(delete-selection-mode t)
+#+end_src
+
+* All programm language
+* C++
+* Backup
+
+We have set a special backup (TODO and temporary and blocking file files) directory to avoid trashing our folders.
+#+begin_src emacs-lisp 
+  ;;(setq backup-directory-alist '(("." . "~/.emacs.d/backup-files")))
+  ;;(setq temporary-file-directory "~/.emacs.d/tempfiles/")
+#+end_src
+
+* Must have
+
+
+And after we install =undo-tree=
+#+begin_src emacs-lisp
+  (use-package undo-tree
+      :init
+      (global-undo-tree-mode)
+      :config
+      (setq undo-tree-visualizer-diff t))
+#+end_src
+Dependency =queue= - it's just structure of data
+
+
+Install AI
+#+begin_src emacs-lisp
+    (use-package openai
+      :config
+      (setq openai-key "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"))
+
+  (openai-completion "How are you?"
+		     (lambda (data)
+		       (message "%s" data)))
+  
+#+end_src
+Dependency =dash= - a modern list API for Emacs.
+=request= Library for creating request. Uses ``curl`` as its backend or Emacs's native ``url.el`` library if
+``curl`` is not found.
+=tblui= Define tabulated list UI easily.
+=tablist= This package adds marks and filters to tabulated-list-mode.  It
+also kind of puts a dired face on tabulated list buffers.
+=magit-popup= This package implements a generic interface for toggling switches
+and setting options and then invoking an Emacs command that does
+something with these arguments.  Usually the command calls an
+external process with the specified arguments.
+This package has been superseded by Transient.  No new features
+will be added but bugs will be fixed.
+
+
+
+We will use =magit= for git project.
+First it have dependency. Installing it.
+
+
+
+And finaly we can use =magit=
+#+begin_src emacs-lisp
+ (use-package magit)
+#+end_src
+
+* My package
+
+** Good-Mouse
+
+#+begin_src emacs-lisp
+ 
+#+end_src
+
+** Define-It
+
+#+begin_src emacs-lisp
+ 
+#+end_src
+
+
+** Call AI for help
+
+* Another language
+
+
