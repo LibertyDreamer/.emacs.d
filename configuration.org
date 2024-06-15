@@ -1,0 +1,462 @@
+#+STARTUP: overview
+#+AUTO_TANGLE: t
+#+PROPERTY: header-args:emacs-lisp :noweb yes :tangle ~/.emacs.d/configuration.el
+
+* Core application
+For start let's install base applications
+** Straight
+Installing straight.el I don't understand what is going on,
+I simply copied it from straight installation instruction.
+#+begin_src emacs-lisp
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+	 (expand-file-name
+	  "straight/repos/straight.el/bootstrap.el"
+	  (or (bound-and-true-p straight-base-dir)
+	      user-emacs-directory)))
+	(bootstrap-version 7))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+	  (url-retrieve-synchronously
+	   "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+	   'silent 'inhibit-cookies)
+	(goto-char (point-max))
+	(eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
+#+end_src
+Use straight for use-package expressions,
+Non-nil straight-use-package-by-default means install packages
+by default in ‘use-package’ forms.
+#+begin_src emacs-lisp
+  (straight-use-package 'use-package)
+  (setq straight-use-package-by-default t)
+#+end_src
+
+* Emacs UI
+** Remove UI elements
+Hide the menu bar,
+Hide the outdated icons,
+Hide the always-visible scrollbar,
+Remove the "Welcome to GNU Emacs" splash screen,
+Ask for textual confirmation instead of GUI.
+#+begin_src emacs-lisp
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)             
+  (scroll-bar-mode -1)           
+  (setq inhibit-splash-screen t)
+  (setq use-file-dialog nil)     
+#+end_src
+
+** Line numbers
+I would like to see line numbers. let's turn it on.
+#+begin_src emacs-lisp
+  (global-display-line-numbers-mode)
+#+end_src
+** Full column indicator
+Simply on it
+#+begin_src emacs-lisp
+  (global-display-fill-column-indicator-mode)
+#+end_src
+
+** Nyan-cat
+Install nyan-mode. And setting it.
+*nyan-animate-nyancat* - t to have it animated, nil for a
+static version.
+*nyan-animation-frame-interval* - number of seconds between
+animation frames. Accepts fractional values.
+*nyan-bar-length* - length of nyan-mode bar, in 8px-wide units.
+*nyan-cat-face-number* - choose a cat face for the console mode.
+*nyan-wavy-trail* - t to make the trail wavy; works even better
+when animation is enabled!
+*nyan-minimum-window-width* - minimum width of the window,
+below which Nyan Mode will be disabled.
+This is important because Nyan Mode will otherwise push out more
+relevant information from the modelilne.
+#+begin_src emacs-lisp
+  (use-package nyan-mode
+    :config
+  (setq nyan-animate-nyancat t
+	nyan-bar-length 50
+	nyan-wavy-trail t)
+  (nyan-mode))
+#+end_src
+
+** Icons
+
+Ok install emacs plagin all-the-icons and check if we have font
+don't try to install one. 
+#+begin_src emacs-lisp
+  (use-package all-the-icons
+    :if (display-graphic-p)
+    :ensure t
+    :config
+    (unless (member "all-the-icons" (font-family-list))
+      (all-the-icons-install-fonts t)))
+#+end_src
+
+** Themes
+
+I will use doom-emacs themes.
+For change theme use *load-theme* function.
+#+begin_src emacs-lisp
+  (use-package doom-themes
+  :demand
+  :custom-face
+  :config
+  (load-theme 'doom-one))
+#+end_src
+
+** Minimap
+DONT work
+#+begin_src emacs-lisp 
+  ;;(use-package minimap)
+  ;;(minimap-mode)
+#+end_src
+
+** Beacon
+Never lose your cursor again
+The appearance of the beacon is configured by
+*beacon-size* and *beacon-color*.
+The duration is configured by
+*beacon-blink-duration* and *beacon-blink-delay*.
+To customize when the beacon should blink at all,
+configure *beacon-blink-when-window-scrolls*,
+*beacon-blink-when-window-changes*, and *beacon-blink-when-point-moves*.
+To prevent the beacon from blinking only on specific situations
+configure *beacon-dont-blink-major-modes*,
+*beacon-dont-blink-predicates*, or *beacon-dont-blink-commands*.
+You can also disable it only in specific
+buffers by doing (setq-local beacon-mode nil).
+Beacon can also push the mark for you whenever point moves a long distance.
+For this, configure beacon-push-mark.
+#+begin_src emacs-lisp 
+  (use-package beacon
+    :config
+    (setq beacon-size 50
+	  beacon-color "#c678dd"
+	  beacon-blink-duration 0.01
+	  beacon-blink-delay 0
+	  beacon-blink-when-window-scrolls t
+	  beacon-blink-when-window-changes t
+	  beacon-blink-when-point-moves t
+	  beacon-push-mark 5)
+    (beacon-mode 1)
+    )
+#+end_src
+** Centaur-tabs
+#+begin_src emacs-lisp
+  (use-package centaur-tabs
+  :init
+  (setq centaur-tabs-enable-key-bindings t)
+  :config
+  (setq centaur-tabs-style "slant"
+	centaur-tabs-height 32
+	centaur-tabs-set-icons t
+	centaur-tabs-show-new-tab-button t
+	centaur-tabs-set-modified-marker t
+	centaur-tabs-show-navigation-buttons t
+	centaur-tabs-set-bar 'under
+	centaur-tabs-show-count nil
+	;; centaur-tabs-label-fixed-length 15
+	;; centaur-tabs-gray-out-icons 'buffer
+	;; centaur-tabs-plain-icons t
+	x-underline-at-descent-line t
+	centaur-tabs-left-edge-margin nil)
+  ;;(centaur-tabs-change-fonts (face-attribute 'default :font) 110)
+  (centaur-tabs-headline-match)
+  ;; (centaur-tabs-enable-buffer-alphabetical-reordering)
+  ;; (setq centaur-tabs-adjust-buffer-order t)
+  (centaur-tabs-mode t))
+#+end_src
+** Treemacs
+#+begin_src emacs-lisp 
+    (use-package treemacs
+    :ensure t
+    :defer t
+    :init
+    (with-eval-after-load 'winum
+      (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+    :config
+    (treemacs-load-theme "Default")
+    (progn
+      (setq treemacs-collapse-dirs                   (if treemacs-python-executable 3 0)
+	    treemacs-deferred-git-apply-delay        0.5
+	    treemacs-directory-name-transformer      #'identity
+	    treemacs-display-in-side-window          t
+	    treemacs-eldoc-display                   'simple
+	    treemacs-file-event-delay                2000
+	    treemacs-file-extension-regex            treemacs-last-period-regex-value
+	    treemacs-file-follow-delay               0.2
+	    treemacs-file-name-transformer           #'identity
+	    treemacs-follow-after-init               t
+	    treemacs-expand-after-init               t
+	    treemacs-find-workspace-method           'find-for-file-or-pick-first
+	    treemacs-git-command-pipe                ""
+	    treemacs-goto-tag-strategy               'refetch-index
+	    treemacs-header-scroll-indicators        '(nil . "^^^^^^")
+	    treemacs-hide-dot-git-directory          t
+	    treemacs-indentation                     2
+	    treemacs-indentation-string              " "
+	    treemacs-is-never-other-window           nil
+	    treemacs-max-git-entries                 5000
+	    treemacs-missing-project-action          'ask
+	    treemacs-move-files-by-mouse-dragging    t
+	    treemacs-move-forward-on-expand          nil
+	    treemacs-no-png-images                   nil
+	    treemacs-no-delete-other-windows         t
+	    treemacs-project-follow-cleanup          nil
+	    treemacs-persist-file                    (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
+	    treemacs-position                        'left
+	    treemacs-read-string-input               'from-child-frame
+	    treemacs-recenter-distance               0.1
+	    treemacs-recenter-after-file-follow      nil
+	    treemacs-recenter-after-tag-follow       nil
+	    treemacs-recenter-after-project-jump     'always
+	    treemacs-recenter-after-project-expand   'on-distance
+	    treemacs-litter-directories              '("/node_modules" "/.venv" "/.cask")
+	    treemacs-project-follow-into-home        nil
+	    treemacs-show-cursor                     nil
+	    treemacs-show-hidden-files               t
+	    treemacs-silent-filewatch                nil
+	    treemacs-silent-refresh                  nil
+	    treemacs-sorting                         'alphabetic-asc
+	    treemacs-select-when-already-in-treemacs 'move-back
+	    treemacs-space-between-root-nodes        t
+	    treemacs-tag-follow-cleanup              t
+	    treemacs-tag-follow-delay                1.5
+	    treemacs-text-scale                      nil
+	    treemacs-user-mode-line-format           nil
+	    treemacs-user-header-line-format         nil
+	    treemacs-wide-toggle-width               70
+	    treemacs-width                           35
+	    treemacs-width-increment                 1
+	    treemacs-width-is-initially-locked       t
+	    treemacs-workspace-switch-cleanup        nil)
+
+      ;; The default width and height of the icons is 22 pixels. If you are
+      ;; using a Hi-DPI display, uncomment this to double the icon size.
+      ;;(treemacs-resize-icons 44)
+
+      (treemacs-follow-mode t)
+      (treemacs-filewatch-mode t)
+      (treemacs-fringe-indicator-mode 'always)
+      (when treemacs-python-executable
+	(treemacs-git-commit-diff-mode t))
+
+      (pcase (cons (not (null (executable-find "git")))
+		   (not (null treemacs-python-executable)))
+	(`(t . t)
+	 (treemacs-git-mode 'deferred))
+	(`(t . _)
+	 (treemacs-git-mode 'simple)))
+
+      (treemacs-hide-gitignored-files-mode nil))
+    (treemacs)
+    :bind
+    (:map global-map
+	  ("M-0"       . treemacs-select-window)
+	  ("C-x t 1"   . treemacs-delete-other-windows)
+	  ("C-x t t"   . treemacs)
+	  ("C-x t d"   . treemacs-select-directory)
+	  ("C-x t B"   . treemacs-bookmark)
+	  ("C-x t C-t" . treemacs-find-file)
+	  ("C-x t M-t" . treemacs-find-tag)))
+
+
+  ;;(use-package treemacs-projectile
+  ;;  :after (treemacs projectile)
+  ;;  :ensure t)
+
+  ;;(use-package treemacs-icons-dired
+  ;;  :hook (dired-mode . treemacs-icons-dired-enable-once)
+  ;;  :ensure t)
+
+  ;;(use-package treemacs-magit
+  ;;  :after (treemacs magit)
+  ;;  :ensure t)
+
+  ;;(use-package treemacs-persp ;;treemacs-perspective if you use perspective.el vs. persp-mode
+  ;;  :after (treemacs persp-mode) ;;or perspective vs. persp-mode
+  ;;  :ensure t
+  ;;  :config (treemacs-set-scope-type 'Perspectives))
+
+  ;;(use-package treemacs-tab-bar ;;treemacs-tab-bar if you use tab-bar-mode
+  ;;  :after (treemacs)
+  ;;  :ensure t
+  ;;  :config (treemacs-set-scope-type 'Tabs))
+#+end_src
+PATCH:
+Switch off beacon in this buffer.
+#+begin_src emacs-lisp
+  
+#+end_src
+** Dashboard
+
+#+begin_src emacs-lisp
+  (use-package dashboard
+  :ensure t
+  :config
+  (setq dashboard-startup-banner 'official
+	dashboard-center-content t
+	dashboard-items '((recents  . 5)
+			  (bookmarks . 5)
+			  (projects . 5)
+			  (agenda . 5)
+			  (registers . 5)))
+  (dashboard-setup-startup-hook)
+  )
+#+end_src
+
+#+begin_src emacs-lisp
+  
+#+end_src
+
+
+* Keybindings
+
+** CUA-mode
+The popular Ctrl-v (paste), Ctrl-c (copy), Ctrl-z (undo) can be enabled by activating
+#+begin_src emacs-lisp
+(cua-mode)
+#+end_src
+
+
+** My keybindings
+
+I don't wanna press esc 3 time, just once.
+#+begin_src emacs-lisp
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+#+end_src
+
+* Utility
+
+** Helm
+
+Let's install and setting it
+#+begin_src emacs-lisp  
+  (straight-use-package 'helm)
+#+end_src
+
+Chose helm like default manager
+#+begin_src emacs-lisp  
+    (global-set-key (kbd "M-x") 'helm-M-x)
+  (setq helm-display-function 'helm-display-buffer-in-own-frame)
+#+end_src
+
+** Undo-tree
+Treat undo history as a tree.
+Install and set undo-tree globally.
+set on undo tree auto save and choose spechial folder.
+#+begin_src emacs-lisp  
+    (use-package undo-tree
+    :ensure t
+    :init
+    (global-undo-tree-mode)
+    :custom
+    (undo-tree-auto-save-history t)
+    (undo-tree-history-directory-alist
+     '(("." . "~/.emacs.d/undo-tree-history"))))
+#+end_src
+** Yasnippet
+#+begin_src emacs-lisp  
+  (use-package yasnippet
+    :config
+    (setq yas-snippet-dirs '("~/.emacs.d/yassnippet"))
+  (yas-global-mode 1))
+#+end_src
+** Magit
+#+begin_src emacs-lisp  
+  (use-package magit)
+#+end_src
+
+* Org mode
+
+** Org-roam
+
+#+begin_src emacs-lisp  
+;;  (use-package org-roam-ui
+;;  :straight
+;;    (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
+;;    :after org-roam
+;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+;;         a hookable mode anymore, you're advised to pick something yourself
+;;         if you don't care about startup time, use
+;;    :hook (after-init . org-roam-ui-mode)
+;;    :config
+;;    (setq org-roam-ui-sync-theme t
+;;          org-roam-ui-follow t
+;;          org-roam-ui-update-on-save t
+;;          org-roam-ui-open-on-start t))
+#+end_src
+
+** Good-looking
+
+Install org-modern
+#+begin_src emacs-lisp  
+  (straight-use-package 'org-modern)
+#+end_src
+
+Let's turn on org-mode 
+#+begin_src emacs-lisp
+  (with-eval-after-load 'org (global-org-modern-mode))
+#+end_src
+
+** Auto tangle
+#+begin_src emacs-lisp  
+  (use-package org-auto-tangle
+  :hook (org-mode . org-auto-tangle-mode))
+#+end_src
+
+* My utility
+** Good-mouse
+
+
+#+begin_src emacs-lisp  
+#+end_src
+
+* Programming
+
+
+** Company box
+it's like company mod but with icons
+
+#+begin_src emacs-lisp  
+  (use-package company-box
+  :hook (company-mode . company-box-mode))
+#+end_src
+** Company mode
+
+#+begin_src emacs-lisp  
+  (use-package company)
+  (company-mode)
+#+end_src
+** LSP-mode
+#+begin_src emacs-lisp
+  (use-package lsp-mode)
+ 
+  (use-package helm-lsp :commands helm-lsp-workspace-symbol)
+  (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+#+end_src
+** LSP-ui
+#+begin_src emacs-lisp
+
+    (use-package lsp-ui :commands lsp-ui-mode)
+    (setq lsp-ui-doc-enable t) 
+  (setq lsp-ui-doc-position t)
+  (setq lsp-ui-doc-delay 0.1)
+  (setq lsp-ui-doc-show-with-mouse t)
+#+end_src
+
+** Flycheck
+
+#+begin_src emacs-lisp 
+
+
+
+  
+
+
+
+#+end_src
+
+* Natural language helper

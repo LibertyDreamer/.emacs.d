@@ -1,0 +1,18 @@
+/#configuration.el#
+/.cache/
+/.local/
+/.org-id-locations
+/My emacs plugins/
+/auto-save-list/
+/build-packages.sh~
+/configuration.el
+/configuration.el~
+/configuration.org~
+/eln-cache/
+/elpa/
+/init.el~
+/org-roam.db
+/recentf
+/straight/
+/transient/
+/undo-tree-history/
