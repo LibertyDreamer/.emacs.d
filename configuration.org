@@ -2,60 +2,51 @@
 #+AUTO_TANGLE: t
 #+PROPERTY: header-args:emacs-lisp :noweb yes :tangle ~/.emacs.d/configuration.el
 
-* Core application
-For start let's install base applications
-** Straight
-Installing straight.el I don't understand what is going on,
-I simply copied it from straight installation instruction.
+* Behavior
+** Set auto save folder
 #+begin_src emacs-lisp
-  (defvar bootstrap-version)
-  (let ((bootstrap-file
-	 (expand-file-name
-	  "straight/repos/straight.el/bootstrap.el"
-	  (or (bound-and-true-p straight-base-dir)
-	      user-emacs-directory)))
-	(bootstrap-version 7))
-    (unless (file-exists-p bootstrap-file)
-      (with-current-buffer
-	  (url-retrieve-synchronously
-	   "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-	   'silent 'inhibit-cookies)
-	(goto-char (point-max))
-	(eval-print-last-sexp)))
-    (load bootstrap-file nil 'nomessage))
-#+end_src
-Use straight for use-package expressions,
-Non-nil straight-use-package-by-default means install packages
-by default in ‘use-package’ forms.
-#+begin_src emacs-lisp
-  (straight-use-package 'use-package)
-  (setq straight-use-package-by-default t)
+  (setq auto-save-file-name-transforms
+  `((".*" "~/.emacs.d/.emacs-saves/" t)))
 #+end_src
 
+** Set backup directory
+#+begin_src emacs-lisp
+  (setq backup-directory-alist '(("." . "~/.emacs.d/.emacs-saves/")))
+#+end_src
+
+
 * Emacs UI
+
 ** Remove UI elements
 Hide the menu bar,
 Hide the outdated icons,
 Hide the always-visible scrollbar,
 Remove the "Welcome to GNU Emacs" splash screen,
+And kill scratch buffer.
 Ask for textual confirmation instead of GUI.
 #+begin_src emacs-lisp
   (menu-bar-mode -1)
   (tool-bar-mode -1)             
   (scroll-bar-mode -1)           
   (setq inhibit-splash-screen t)
+  (add-hook 'after-init-hook (lambda () (kill-buffer "*scratch*")))
   (setq use-file-dialog nil)     
 #+end_src
 
-** Line numbers
-I would like to see line numbers. let's turn it on.
-#+begin_src emacs-lisp
-  (global-display-line-numbers-mode)
-#+end_src
 ** Full column indicator
 Simply on it
 #+begin_src emacs-lisp
   (global-display-fill-column-indicator-mode)
+#+end_src
+** Line number
+I would like to see line numbers. let's turn it on.
+Next, set the width of the field with numbers to ‘auto’ to avoid
+swaying.
+And set collor.
+#+begin_src emacs-lisp
+  (global-display-line-numbers-mode)
+  (setq display-line-numbers-width-start t)
+  (set-face-foreground 'line-number  "#c678dd")
 #+end_src
 
 ** Nyan-cat
@@ -75,13 +66,14 @@ relevant information from the modelilne.
 #+begin_src emacs-lisp
   (use-package nyan-mode
     :config
-  (setq nyan-animate-nyancat t
-	nyan-bar-length 50
-	nyan-wavy-trail t)
-  (nyan-mode))
+    (setq nyan-animate-nyancat t
+	  nyan-animation-frame-interval 0.16
+	  nyan-bar-length 50
+	  nyan-wavy-trail t)
+    (nyan-mode))
 #+end_src
-
-** Icons
+    
+** Fonts, icons and unicode
 
 Ok install emacs plagin all-the-icons and check if we have font
 don't try to install one. 
@@ -94,16 +86,34 @@ don't try to install one.
       (all-the-icons-install-fonts t)))
 #+end_src
 
+Install unicode fonsts
+#+begin_src emacs-lisp
+   (use-package unicode-fonts)
+  (unicode-fonts-setup)
+#+end_src
+Install nerd-fonts
+
+#+begin_src emacs-lisp
+  
+  (use-package nerd-icons
+  ;; :custom
+  ;; The Nerd Font you want to use in GUI
+  ;; "Symbols Nerd Font Mono" is the default and is recommended
+  ;; but you can use any other Nerd Font if you want
+  
+    )
+  (nerd-icons-install-fonts)
+#+end_src
+
 ** Themes
 
 I will use doom-emacs themes.
 For change theme use *load-theme* function.
 #+begin_src emacs-lisp
   (use-package doom-themes
-  :demand
   :custom-face
   :config
-  (load-theme 'doom-one))
+  (load-theme 'doom-one t))
 #+end_src
 
 ** Minimap
@@ -128,18 +138,21 @@ configure *beacon-dont-blink-major-modes*,
 You can also disable it only in specific
 buffers by doing (setq-local beacon-mode nil).
 Beacon can also push the mark for you whenever point moves a long distance.
-For this, configure beacon-push-mark.
+For this, configure *beacon-push-mark*.
 #+begin_src emacs-lisp 
   (use-package beacon
     :config
     (setq beacon-size 50
 	  beacon-color "#c678dd"
 	  beacon-blink-duration 0.01
-	  beacon-blink-delay 0
+	  beacon-blink-delay 0.1
 	  beacon-blink-when-window-scrolls t
 	  beacon-blink-when-window-changes t
-	  beacon-blink-when-point-moves t
-	  beacon-push-mark 5)
+	  beacon-push-mark 5
+	  beacon-dont-blink-major-modes
+	  '(t magit-status-mode magit-popup-mode inf-ruby-mode
+	      mu4e-headers-mode gnus-summary-mode
+	      gnus-group-mode treemacs-mode dashboard))
     (beacon-mode 1)
     )
 #+end_src
@@ -159,7 +172,7 @@ For this, configure beacon-push-mark.
 	centaur-tabs-show-count nil
 	;; centaur-tabs-label-fixed-length 15
 	;; centaur-tabs-gray-out-icons 'buffer
-	;; centaur-tabs-plain-icons t
+	centaur-tabs-plain-icons t
 	x-underline-at-descent-line t
 	centaur-tabs-left-edge-margin nil)
   ;;(centaur-tabs-change-fonts (face-attribute 'default :font) 110)
@@ -170,120 +183,14 @@ For this, configure beacon-push-mark.
 #+end_src
 ** Treemacs
 #+begin_src emacs-lisp 
-    (use-package treemacs
-    :ensure t
-    :defer t
-    :init
-    (with-eval-after-load 'winum
-      (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
-    :config
-    (treemacs-load-theme "Default")
-    (progn
-      (setq treemacs-collapse-dirs                   (if treemacs-python-executable 3 0)
-	    treemacs-deferred-git-apply-delay        0.5
-	    treemacs-directory-name-transformer      #'identity
-	    treemacs-display-in-side-window          t
-	    treemacs-eldoc-display                   'simple
-	    treemacs-file-event-delay                2000
-	    treemacs-file-extension-regex            treemacs-last-period-regex-value
-	    treemacs-file-follow-delay               0.2
-	    treemacs-file-name-transformer           #'identity
-	    treemacs-follow-after-init               t
-	    treemacs-expand-after-init               t
-	    treemacs-find-workspace-method           'find-for-file-or-pick-first
-	    treemacs-git-command-pipe                ""
-	    treemacs-goto-tag-strategy               'refetch-index
-	    treemacs-header-scroll-indicators        '(nil . "^^^^^^")
-	    treemacs-hide-dot-git-directory          t
-	    treemacs-indentation                     2
-	    treemacs-indentation-string              " "
-	    treemacs-is-never-other-window           nil
-	    treemacs-max-git-entries                 5000
-	    treemacs-missing-project-action          'ask
-	    treemacs-move-files-by-mouse-dragging    t
-	    treemacs-move-forward-on-expand          nil
-	    treemacs-no-png-images                   nil
-	    treemacs-no-delete-other-windows         t
-	    treemacs-project-follow-cleanup          nil
-	    treemacs-persist-file                    (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
-	    treemacs-position                        'left
-	    treemacs-read-string-input               'from-child-frame
-	    treemacs-recenter-distance               0.1
-	    treemacs-recenter-after-file-follow      nil
-	    treemacs-recenter-after-tag-follow       nil
-	    treemacs-recenter-after-project-jump     'always
-	    treemacs-recenter-after-project-expand   'on-distance
-	    treemacs-litter-directories              '("/node_modules" "/.venv" "/.cask")
-	    treemacs-project-follow-into-home        nil
-	    treemacs-show-cursor                     nil
-	    treemacs-show-hidden-files               t
-	    treemacs-silent-filewatch                nil
-	    treemacs-silent-refresh                  nil
-	    treemacs-sorting                         'alphabetic-asc
-	    treemacs-select-when-already-in-treemacs 'move-back
-	    treemacs-space-between-root-nodes        t
-	    treemacs-tag-follow-cleanup              t
-	    treemacs-tag-follow-delay                1.5
-	    treemacs-text-scale                      nil
-	    treemacs-user-mode-line-format           nil
-	    treemacs-user-header-line-format         nil
-	    treemacs-wide-toggle-width               70
-	    treemacs-width                           35
-	    treemacs-width-increment                 1
-	    treemacs-width-is-initially-locked       t
-	    treemacs-workspace-switch-cleanup        nil)
-
-      ;; The default width and height of the icons is 22 pixels. If you are
-      ;; using a Hi-DPI display, uncomment this to double the icon size.
-      ;;(treemacs-resize-icons 44)
-
-      (treemacs-follow-mode t)
-      (treemacs-filewatch-mode t)
-      (treemacs-fringe-indicator-mode 'always)
-      (when treemacs-python-executable
-	(treemacs-git-commit-diff-mode t))
-
-      (pcase (cons (not (null (executable-find "git")))
-		   (not (null treemacs-python-executable)))
-	(`(t . t)
-	 (treemacs-git-mode 'deferred))
-	(`(t . _)
-	 (treemacs-git-mode 'simple)))
-
-      (treemacs-hide-gitignored-files-mode nil))
-    (treemacs)
-    :bind
-    (:map global-map
-	  ("M-0"       . treemacs-select-window)
-	  ("C-x t 1"   . treemacs-delete-other-windows)
-	  ("C-x t t"   . treemacs)
-	  ("C-x t d"   . treemacs-select-directory)
-	  ("C-x t B"   . treemacs-bookmark)
-	  ("C-x t C-t" . treemacs-find-file)
-	  ("C-x t M-t" . treemacs-find-tag)))
-
-
-  ;;(use-package treemacs-projectile
-  ;;  :after (treemacs projectile)
-  ;;  :ensure t)
-
-  ;;(use-package treemacs-icons-dired
-  ;;  :hook (dired-mode . treemacs-icons-dired-enable-once)
-  ;;  :ensure t)
-
-  ;;(use-package treemacs-magit
-  ;;  :after (treemacs magit)
-  ;;  :ensure t)
-
-  ;;(use-package treemacs-persp ;;treemacs-perspective if you use perspective.el vs. persp-mode
-  ;;  :after (treemacs persp-mode) ;;or perspective vs. persp-mode
-  ;;  :ensure t
-  ;;  :config (treemacs-set-scope-type 'Perspectives))
-
-  ;;(use-package treemacs-tab-bar ;;treemacs-tab-bar if you use tab-bar-mode
-  ;;  :after (treemacs)
-  ;;  :ensure t
-  ;;  :config (treemacs-set-scope-type 'Tabs))
+  (use-package treemacs
+  :ensure t
+  :defer t
+  :init
+  (with-eval-after-load 'winum
+    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+  :config
+  (treemacs))
 #+end_src
 PATCH:
 Switch off beacon in this buffer.
@@ -293,11 +200,12 @@ Switch off beacon in this buffer.
 ** Dashboard
 
 #+begin_src emacs-lisp
-  (use-package dashboard
+  (use-package dashboard 
   :ensure t
   :config
-  (setq dashboard-startup-banner 'official
+  (setq dashboard-startup-banner "~/.emacs.d//marivector.png"
 	dashboard-center-content t
+	dashboard-vertically-center-content t
 	dashboard-items '((recents  . 5)
 			  (bookmarks . 5)
 			  (projects . 5)
@@ -307,26 +215,48 @@ Switch off beacon in this buffer.
   )
 #+end_src
 
+** Doom modeline
 #+begin_src emacs-lisp
-  
+  (use-package doom-modeline
+  :ensure t
+  :config
+  ;; Ширина разделяющей полоски
+  (setq doom-modeline-bar-width 1)
+  ;; Показывать ли минорные режимы
+  (setq doom-modeline-minor-modes t)
+
+  (setq doom-modeline-major-mode-icon t)
+  :init (doom-modeline-mode 1))
+#+end_src
+** Page break line
+#+begin_src emacs-lisp
+  (use-package page-break-lines
+  :config
+  (global-page-break-lines-mode))
+#+end_src
+** Where buffers are displayed
+I wanna buffer *Help* just center of the emacs
+#+begin_src emacs-lisp
+;;  (add-to-list 'display-buffer-alist
+;;	      '("\\*Help\\*"
+;;		(display-buffer-in-atom-window)
+;;		(window-height . 12)))
 #+end_src
 
 
 * Keybindings
-
 ** CUA-mode
-The popular Ctrl-v (paste), Ctrl-c (copy), Ctrl-z (undo) can be enabled by activating
+The popular Ctrl-v (paste), Ctrl-c (copy), Ctrl-z (undo) mode.
 #+begin_src emacs-lisp
 (cua-mode)
 #+end_src
 
-
 ** My keybindings
-
 I don't wanna press esc 3 time, just once.
 #+begin_src emacs-lisp
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 #+end_src
+
 
 * Utility
 
@@ -340,7 +270,7 @@ Let's install and setting it
 Chose helm like default manager
 #+begin_src emacs-lisp  
     (global-set-key (kbd "M-x") 'helm-M-x)
-  (setq helm-display-function 'helm-display-buffer-in-own-frame)
+    (setq helm-display-function 'helm-display-buffer-in-own-frame)
 #+end_src
 
 ** Undo-tree
@@ -368,6 +298,21 @@ set on undo tree auto save and choose spechial folder.
 #+begin_src emacs-lisp  
   (use-package magit)
 #+end_src
+** Poly-mode
+Polymode is a framework for multiple major modes (MMM) inside a
+single Emacs buffer. It is fast and has a simple but flexible object
+oriented design. Creating new polymodes normally takes a few lines of code.
+#+begin_src emacs-lisp
+  (use-package poly-org)
+#+end_src
+
+** Postframe
+Posframe can pop up a frame at point, this posframe is a
+child-frame connected to its root window’s buffer.
+#+begin_src emacs-lisp
+  (require 'posframe)
+#+end_src
+
 
 * Org mode
 
@@ -393,58 +338,51 @@ set on undo tree auto save and choose spechial folder.
 
 Install org-modern
 #+begin_src emacs-lisp  
-  (straight-use-package 'org-modern)
+  (use-package org-modern
+    :config
+    (global-org-modern-mode t)
+    )
 #+end_src
 
-Let's turn on org-mode 
-#+begin_src emacs-lisp
-  (with-eval-after-load 'org (global-org-modern-mode))
-#+end_src
-
-** Auto tangle
-#+begin_src emacs-lisp  
-  (use-package org-auto-tangle
-  :hook (org-mode . org-auto-tangle-mode))
-#+end_src
-
-* My utility
-** Good-mouse
-
-
-#+begin_src emacs-lisp  
-#+end_src
 
 * Programming
 
-
-** Company box
-it's like company mod but with icons
-
-#+begin_src emacs-lisp  
-  (use-package company-box
-  :hook (company-mode . company-box-mode))
-#+end_src
 ** Company mode
 
+Well lets start from installing application,
+Next set icons for company 
 #+begin_src emacs-lisp  
-  (use-package company)
-  (company-mode)
+(use-package company
+  :init (setq company-format-margin-function    #'company-vscode-dark-icons-margin)
+  :after lsp-mode
+  :hook ((lsp-mode emacs-lisp-mode org-mode) . company-mode)
+  :bind (:map company-active-map ("<tab>" . company-complete)) (:map company-active-map ("C-c s" . company-yasnippet))
+  :config
+  (setq company-backends '(company-capf company-yasnippet company-keywords company-files company-elisp company-ispell company-semantic company-org-block))
+  (setq company-tooltip-align-annotations t)
+  (setq company-tooltip-limit 20)
+  (setq company-tooltip-offset-display 'scrollbar)
+  (global-company-mode 1))
 #+end_src
+
 ** LSP-mode
 #+begin_src emacs-lisp
   (use-package lsp-mode)
- 
-  (use-package helm-lsp :commands helm-lsp-workspace-symbol)
-  (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+  ;;(add-hook 'org-mode-hook #'lsp)
+  ;;(add-hook 'elisp-mode-hook #'lsp)
 #+end_src
+
+
 ** LSP-ui
 #+begin_src emacs-lisp
 
     (use-package lsp-ui :commands lsp-ui-mode)
     (setq lsp-ui-doc-enable t) 
-  (setq lsp-ui-doc-position t)
-  (setq lsp-ui-doc-delay 0.1)
-  (setq lsp-ui-doc-show-with-mouse t)
+  (setq lsp-ui-doc-position 'top)
+  (setq lsp-ui-doc-delay 1)
+    (setq lsp-ui-doc-show-with-mouse t)
+    (setq lsp-ui-doc-show-with-cursor t)
+    (setq lsp-ui-doc-position 'at-point)
 #+end_src
 
 ** Flycheck
@@ -452,11 +390,45 @@ it's like company mod but with icons
 #+begin_src emacs-lisp 
 
 
+#+end_src
 
+** DAP
+#+begin_src emacs-lisp
+  (use-package dap-mode
+  :ensure t
+  :config
+  (dap-auto-configure-mode))
+#+end_src
+
+
+* Natural language helper
+
+** Define word
+is a GNU Emacs package that lets you see the definition
+of a word or a phrase at point, without having to switch to a browser.
+#+begin_src emacs-lisp
+(use-package define-word)
+#+end_src
+
+And I wanna define-word appear in box
+#+begin_src emacs-lisp
   
+(defun define-word-at-point-in-pop-up (arg &optional service)
+  "Use define word at point and show it into postframe"
+  (interactive "P")
+
+  (let ((buffer-name (generate-new-buffer-name "define-word-postframe"))) 
+    (posframe-show buffer-name
+                   :string (format "%s:\n%s" (thing-at-point 'word t) (define-word-at-point arg service))
+                   :position (point)
+		   :background-color (face-attribute 'tooltip :background)
+                   :foreground-color (face-attribute 'tooltip :foreground)
+                   :internal-border-width 10
+                   :internal-border-color "gray"
+                   :border-width 2
+                   :border-color "black")))
+
 
 
 
 #+end_src
-
-* Natural language helper
