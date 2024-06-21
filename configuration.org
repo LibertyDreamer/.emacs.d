@@ -33,21 +33,6 @@ Ask for textual confirmation instead of GUI.
   (setq use-file-dialog nil)     
 #+end_src
 
-** Full column indicator
-Simply on it
-#+begin_src emacs-lisp
-  (global-display-fill-column-indicator-mode)
-#+end_src
-** Line number
-I would like to see line numbers. let's turn it on.
-Next, set the width of the field with numbers to ‘auto’ to avoid
-swaying.
-And set collor.
-#+begin_src emacs-lisp
-  (global-display-line-numbers-mode)
-  (setq display-line-numbers-width-start t)
-  (set-face-foreground 'line-number  "#c678dd")
-#+end_src
 
 ** Nyan-cat
 Install nyan-mode. And setting it.
@@ -72,7 +57,47 @@ relevant information from the modelilne.
 	  nyan-wavy-trail t)
     (nyan-mode))
 #+end_src
-    
+
+
+
+
+** Themes
+
+I will use doom-emacs themes.
+For change theme use *load-theme* function.
+#+begin_src emacs-lisp
+  (use-package doom-themes
+    :ensure t
+    :config
+    (load-theme 'doom-one t))
+#+end_src
+
+
+** Full column indicator
+O would like to see column indicator in programming and org mode
+#+begin_src emacs-lisp
+  (add-hook 'prog-mode-hook 'display-fill-column-indicator-mode)
+  (add-hook 'org-mode-hook 'display-fill-column-indicator-mode)
+#+end_src
+
+
+
+** Line number
+I would like to see line numbers in programming and org mode.
+Next, set the width of the field with numbers to ‘auto’ to avoid
+swaying.
+And set collor( This is important to do it after set theme)
+#+begin_src emacs-lisp
+  (use-package emacs
+    :config
+    (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+    (add-hook 'org-mode-hook 'display-line-numbers-mode)
+    (set-face-foreground 'line-number "#c678dd")
+    (setq display-line-numbers-width-start t))
+#+end_src
+
+
+
 ** Fonts, icons and unicode
 
 Ok install emacs plagin all-the-icons and check if we have font
@@ -88,33 +113,30 @@ don't try to install one.
 
 Install unicode fonsts
 #+begin_src emacs-lisp
-   (use-package unicode-fonts)
-  (unicode-fonts-setup)
+  (use-package unicode-fonts
+    :config
+
+    )
+   (unicode-fonts-setup)
 #+end_src
 Install nerd-fonts
 
 #+begin_src emacs-lisp
-  
   (use-package nerd-icons
-  ;; :custom
-  ;; The Nerd Font you want to use in GUI
-  ;; "Symbols Nerd Font Mono" is the default and is recommended
-  ;; but you can use any other Nerd Font if you want
-  
-    )
-  (nerd-icons-install-fonts)
+    :config
+    (unless (member "Symbols Nerd Font Mono" (font-family-list))
+       (nerd-icons-install-fonts t)))
 #+end_src
-
-** Themes
-
-I will use doom-emacs themes.
-For change theme use *load-theme* function.
+unicode
 #+begin_src emacs-lisp
-  (use-package doom-themes
-  :custom-face
-  :config
-  (load-theme 'doom-one t))
+(prefer-coding-system       'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(setq default-buffer-file-coding-system 'utf-8)                      
+(setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
 #+end_src
+
 
 ** Minimap
 DONT work
@@ -162,26 +184,16 @@ For this, configure *beacon-push-mark*.
   :init
   (setq centaur-tabs-enable-key-bindings t)
   :config
-  (setq centaur-tabs-style "slant"
+  (setq centaur-tabs-style "wave"
 	centaur-tabs-height 32
 	centaur-tabs-set-icons t
-	centaur-tabs-show-new-tab-button t
-	centaur-tabs-set-modified-marker t
-	centaur-tabs-show-navigation-buttons t
-	centaur-tabs-set-bar 'under
-	centaur-tabs-show-count nil
-	;; centaur-tabs-label-fixed-length 15
-	;; centaur-tabs-gray-out-icons 'buffer
-	centaur-tabs-plain-icons t
-	x-underline-at-descent-line t
-	centaur-tabs-left-edge-margin nil)
-  ;;(centaur-tabs-change-fonts (face-attribute 'default :font) 110)
-  (centaur-tabs-headline-match)
-  ;; (centaur-tabs-enable-buffer-alphabetical-reordering)
-  ;; (setq centaur-tabs-adjust-buffer-order t)
+	centaur-tabs-icon-type 'all-the-icons
+	centaur-tabs-close-button "🗙")
   (centaur-tabs-mode t))
 #+end_src
 ** Treemacs
+
+
 #+begin_src emacs-lisp 
   (use-package treemacs
   :ensure t
@@ -197,6 +209,7 @@ Switch off beacon in this buffer.
 #+begin_src emacs-lisp
   
 #+end_src
+
 ** Dashboard
 
 #+begin_src emacs-lisp
@@ -211,6 +224,37 @@ Switch off beacon in this buffer.
 			  (projects . 5)
 			  (agenda . 5)
 			  (registers . 5)))
+
+
+  (setq dashboard-navigator-buttons
+        `(;; line1
+          ((,nil
+            "Witchmacs on github"
+            "Open Witchmacs' github page on your browser"
+            (lambda (&rest _) (browse-url "https://github.com/snackon/witchmacs"))
+            'default)
+           (nil
+            "Witchmacs crash course"
+            "Open Witchmacs' introduction to Emacs"
+            (lambda (&rest _) (find-file "~/.emacs.d/Witcheat.org"))
+            'default)
+           (nil
+            "Update Witchmacs"
+            "Get the latest Witchmacs update. Check out the github commits for changes!"
+            (lambda (&rest _) (update-config))
+            'default)
+           )
+          ;; line 2
+          ((,nil
+            "Open scratch buffer"
+            "Switch to the scratch buffer"
+            (lambda (&rest _) (create-scratch-buffer))
+            'default)
+           (nil
+            "Open config.org"
+            "Open configuration file for easy editing"
+            (lambda (&rest _) (find-file "~/.emacs.d/configuration.org"))
+            'default))))
   (dashboard-setup-startup-hook)
   )
 #+end_src
@@ -244,6 +288,12 @@ I wanna buffer *Help* just center of the emacs
 #+end_src
 
 
+
+
+
+
+
+
 * Keybindings
 ** CUA-mode
 The popular Ctrl-v (paste), Ctrl-c (copy), Ctrl-z (undo) mode.
@@ -256,6 +306,9 @@ I don't wanna press esc 3 time, just once.
 #+begin_src emacs-lisp
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 #+end_src
+
+
+
 
 
 * Utility
@@ -318,11 +371,11 @@ child-frame connected to its root window’s buffer.
 
 ** Org-roam
 
-#+begin_src emacs-lisp  
+#+begin_src emacs-lisp
 ;;  (use-package org-roam-ui
-;;  :straight
-;;    (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
-;;    :after org-roam
+;;    :straight
+;;     (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
+;;      :after org
 ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
 ;;         a hookable mode anymore, you're advised to pick something yourself
 ;;         if you don't care about startup time, use
