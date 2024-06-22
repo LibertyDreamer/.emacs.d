@@ -3,16 +3,39 @@
 #+PROPERTY: header-args:emacs-lisp :noweb yes :tangle ~/.emacs.d/configuration.el
 
 * Behavior
+
 ** Set auto save folder
 #+begin_src emacs-lisp
   (setq auto-save-file-name-transforms
-  `((".*" "~/.emacs.d/.emacs-saves/" t)))
+	`((".*" "~/.emacs.d/.emacs-backup/" t)))
 #+end_src
+
 
 ** Set backup directory
 #+begin_src emacs-lisp
-  (setq backup-directory-alist '(("." . "~/.emacs.d/.emacs-saves/")))
+  (setq backup-directory-alist '(("." . "~/.emacs.d/.emacs-backup/")))
 #+end_src
+
+
+* Keybindings
+
+** CUA-mode
+The popular Ctrl-v (paste), Ctrl-c (copy), Ctrl-z (undo) mode.
+#+begin_src emacs-lisp
+(cua-mode)
+#+end_src
+
+
+** My keybindings
+I don't wanna press esc 3 time, just once.
+#+begin_src emacs-lisp
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+  
+#+end_src
+
+
+
+
 
 
 * Emacs UI
@@ -26,11 +49,11 @@ And kill scratch buffer.
 Ask for textual confirmation instead of GUI.
 #+begin_src emacs-lisp
   (menu-bar-mode -1)
-  (tool-bar-mode -1)             
-  (scroll-bar-mode -1)           
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
   (setq inhibit-splash-screen t)
   (add-hook 'after-init-hook (lambda () (kill-buffer "*scratch*")))
-  (setq use-file-dialog nil)     
+  (setq use-file-dialog nil)
 #+end_src
 
 
@@ -53,12 +76,10 @@ relevant information from the modelilne.
     :config
     (setq nyan-animate-nyancat t
 	  nyan-animation-frame-interval 0.16
-	  nyan-bar-length 50
+	  nyan-bar-length 20
 	  nyan-wavy-trail t)
     (nyan-mode))
 #+end_src
-
-
 
 
 ** Themes
@@ -97,15 +118,12 @@ And set collor( This is important to do it after set theme)
 #+end_src
 
 
-
 ** Fonts, icons and unicode
 
 Ok install emacs plagin all-the-icons and check if we have font
-don't try to install one. 
+don't try to install one.
 #+begin_src emacs-lisp
   (use-package all-the-icons
-    :if (display-graphic-p)
-    :ensure t
     :config
     (unless (member "all-the-icons" (font-family-list))
       (all-the-icons-install-fonts t)))
@@ -113,10 +131,7 @@ don't try to install one.
 
 Install unicode fonsts
 #+begin_src emacs-lisp
-  (use-package unicode-fonts
-    :config
-
-    )
+  (use-package unicode-fonts)
    (unicode-fonts-setup)
 #+end_src
 Install nerd-fonts
@@ -127,21 +142,11 @@ Install nerd-fonts
     (unless (member "Symbols Nerd Font Mono" (font-family-list))
        (nerd-icons-install-fonts t)))
 #+end_src
-unicode
-#+begin_src emacs-lisp
-(prefer-coding-system       'utf-8)
-(set-default-coding-systems 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(setq default-buffer-file-coding-system 'utf-8)                      
-(setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
-#+end_src
-
 
 ** Minimap
-DONT work
+
 #+begin_src emacs-lisp 
-  ;;(use-package minimap)
+  (use-package demap)
   ;;(minimap-mode)
 #+end_src
 
@@ -188,8 +193,15 @@ For this, configure *beacon-push-mark*.
 	centaur-tabs-height 32
 	centaur-tabs-set-icons t
 	centaur-tabs-icon-type 'all-the-icons
-	centaur-tabs-close-button "🗙")
-  (centaur-tabs-mode t))
+	centaur-tabs-close-button "X"
+	centaur-tabs-set-modified-marker t
+	centaur-tabs-modified-marker "🛠️")
+
+  ;;(centaur-tabs-mode t)
+  )
+ (add-hook 'prog-mode-hook 'centaur-tabs-mode)
+ (add-hook 'org-mode-hook 'centaur-tabs-mode)
+  
 #+end_src
 ** Treemacs
 
@@ -210,54 +222,81 @@ Switch off beacon in this buffer.
   
 #+end_src
 
+
+
 ** Dashboard
 
 #+begin_src emacs-lisp
-  (use-package dashboard 
+  (use-package dashboard
   :ensure t
+  :defer nil
+  :preface
+  (defun update-config ()
+    "Update Emacs to the latest version."
+    (let ((dir (expand-file-name user-emacs-directory)))
+      (if (file-exists-p dir)
+          (progn
+            (message "Emacs is updating!")
+            (cd dir)
+            (shell-command "git pull")
+            (message "Update finished. Switch to the messages buffer
+  to see changes and then restart Emacs"))
+        (message "\"%s\" doesn't exist." dir))))
   :config
-  (setq dashboard-startup-banner "~/.emacs.d//marivector.png"
-	dashboard-center-content t
-	dashboard-vertically-center-content t
-	dashboard-items '((recents  . 5)
-			  (bookmarks . 5)
-			  (projects . 5)
-			  (agenda . 5)
-			  (registers . 5)))
+  (setq dashboard-startupify-list '(dashboard-insert-banner
+                                    dashboard-insert-newline
+                                    dashboard-insert-banner-title
+                                    dashboard-insert-newline
+                                    dashboard-insert-navigator
+                                    dashboard-insert-items
+                                    dashboard-insert-newline
+                                    dashboard-insert-footer
+				    dashboard-insert-newline
+				    dashboard-insert-init-info))
 
-
+  
+  (setq dashboard-items '((recents . 10)))
+  (setq dashboard-startup-banner 
+	(let ((images (cddr (directory-files "~/.emacs.d/dashboard-images" 'full))))
+	  (nth (random (length images)) images)))
+  (setq dashboard-banner-logo-title "W I T C H M A C S - The cutest Emacs distribution!")
+  (setq dashboard-center-content t)
+  (setq dashboard-show-shortcuts t)
+  (setq dashboard-set-init-info t)
+  (setq dashboard-set-footer nil)
+  (setq dashboard-set-navigator t)
   (setq dashboard-navigator-buttons
-        `(;; line1
-          ((,nil
-            "Witchmacs on github"
-            "Open Witchmacs' github page on your browser"
-            (lambda (&rest _) (browse-url "https://github.com/snackon/witchmacs"))
-            'default)
-           (nil
-            "Witchmacs crash course"
-            "Open Witchmacs' introduction to Emacs"
-            (lambda (&rest _) (find-file "~/.emacs.d/Witcheat.org"))
-            'default)
-           (nil
-            "Update Witchmacs"
-            "Get the latest Witchmacs update. Check out the github commits for changes!"
-            (lambda (&rest _) (update-config))
-            'default)
-           )
-          ;; line 2
-          ((,nil
-            "Open scratch buffer"
-            "Switch to the scratch buffer"
-            (lambda (&rest _) (create-scratch-buffer))
-            'default)
-           (nil
-            "Open config.org"
-            "Open configuration file for easy editing"
-            (lambda (&rest _) (find-file "~/.emacs.d/configuration.org"))
-            'default))))
+      `(;; line1
+        (
+	 (,(all-the-icons-faicon "github" :height 1.1 :v-adjust -0.1)
+          "Homepage"
+          "Browse homepage"
+          (lambda (&rest _) (browse-url "https://github.com/LibertyDreamer/.emacs.d/tree/master")))
+
+	 (,(all-the-icons-octicon "git-merge" :height 1.1 :v-adjust -0.1)
+	  "Update"
+	  "Update emacs"
+	  (lambda (&rest _) (update-config)))
+	 
+         ("?" "" "?/h" #'show-help nil "<" ">"))
+        ;; line 2
+        ((,(all-the-icons-faicon "linkedin" :height 1.1 :v-adjust 0.0)
+          "Linkedin"
+          ""
+          (lambda (&rest _) (browse-url "homepage")))
+         ("⚑" nil "Show flags" (lambda (&rest _) (message "flag")) error)
+
+	 )))
+  (setq dashboard-icon-type 'all-the-icons)
   (dashboard-setup-startup-hook)
   )
+
+  
+
+  
 #+end_src
+
+
 
 ** Doom modeline
 #+begin_src emacs-lisp
@@ -285,26 +324,13 @@ I wanna buffer *Help* just center of the emacs
 ;;	      '("\\*Help\\*"
 ;;		(display-buffer-in-atom-window)
 ;;		(window-height . 12)))
-#+end_src
 
-
-
-
-
-
-
-
-* Keybindings
-** CUA-mode
-The popular Ctrl-v (paste), Ctrl-c (copy), Ctrl-z (undo) mode.
-#+begin_src emacs-lisp
-(cua-mode)
-#+end_src
-
-** My keybindings
-I don't wanna press esc 3 time, just once.
-#+begin_src emacs-lisp
-  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+(setq display-buffer-alist
+      '(("*Messages*"
+         (display-buffer-
+          display-buffer-in-side-window)
+         (side . bottom)
+         (window-height . 0.3))))
 #+end_src
 
 
@@ -366,6 +392,14 @@ child-frame connected to its root window’s buffer.
   (require 'posframe)
 #+end_src
 
+** Minions
+#+begin_src emacs-lisp
+  (use-package minions
+    :config
+    (setq minions-mode-line-lighter "⚙"
+	  minions-mode-line-delimiters (cons "" ""))
+    (minions-mode 1))
+#+end_src
 
 * Org mode
 
@@ -438,21 +472,65 @@ Next set icons for company
     (setq lsp-ui-doc-position 'at-point)
 #+end_src
 
-** Flycheck
+** Flycheck !!! OR FLYMAKE
 
 #+begin_src emacs-lisp 
+(use-package flycheck
+  :ensure t
+  :config
+  (add-hook 'after-init-hook #'global-flycheck-mode))
 
+(use-package flycheck-color-mode-line)
+
+(eval-after-load "flycheck"
+  '(add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode))
+
+(use-package flycheck-inline)
+
+(setq flycheck-display-errors-delay 0)
+
+(with-eval-after-load 'flycheck
+  (add-hook 'flycheck-mode-hook #'flycheck-inline-mode))
+
+#+end_src
+
+** Flycheck status emoji
+#+begin_src emacs-lisp
+  (use-package flycheck-status-emoji)
+
+;(if (not (find-font (font-spec :name "Noto color emoj")))
+;    (all-the-icons-install-fonts t))
+
+(flycheck-status-emoji-mode 1)
+(setq flycheck-status-emoji-indicator-finished-ok 128571)
+(setq flycheck-status-emoji-indicator-finished-error 128576)
+(setq flycheck-status-emoji-indicator-finished-warning 128574)
+(setq flycheck-status-emoji-indicator-finished-info 128570)
+(setq flycheck-status-emoji-indicator-suspicious 128572)
 
 #+end_src
 
 ** DAP
 #+begin_src emacs-lisp
   (use-package dap-mode
-  :ensure t
-  :config
-  (dap-auto-configure-mode))
+    :ensure t
+    :config
+    (dap-auto-configure-mode))
 #+end_src
 
+
+
+
+** CPP
+
+
+** Elisp
+
+*** Clippy
+TODO CONFIG IT
+#+begin_src emacs-lisp
+  (use-package clippy)
+#+end_src
 
 * Natural language helper
 
@@ -467,21 +545,9 @@ And I wanna define-word appear in box
 #+begin_src emacs-lisp
   
 (defun define-word-at-point-in-pop-up (arg &optional service)
-  "Use define word at point and show it into postframe"
   (interactive "P")
-
-  (let ((buffer-name (generate-new-buffer-name "define-word-postframe"))) 
-    (posframe-show buffer-name
-                   :string (format "%s:\n%s" (thing-at-point 'word t) (define-word-at-point arg service))
-                   :position (point)
-		   :background-color (face-attribute 'tooltip :background)
-                   :foreground-color (face-attribute 'tooltip :foreground)
-                   :internal-border-width 10
-                   :internal-border-color "gray"
-                   :border-width 2
-                   :border-color "black")))
-
-
-
-
+  (clippy-say  (format "%s:\n%s" (thing-at-point 'word t)
+		       (define-word-at-point arg service))))
 #+end_src
+
+

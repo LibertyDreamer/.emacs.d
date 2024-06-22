@@ -18,3 +18,5 @@
 /undo-tree-history/
 /.emacs-saves/
 /var/
+/.emacs-backup/
+/.litable-lists.el
