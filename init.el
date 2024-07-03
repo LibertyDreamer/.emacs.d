@@ -1,41 +1,49 @@
 ;; Core application 
 ;; Without them all will be broken
-;;For start let's install base applications
 
-;;Installing straight.el. I don't understand what is going on,
-;;I simply copied it from straight installation instruction.
-;;; Code:
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name
-	"straight/repos/straight.el/bootstrap.el"
-	(or (bound-and-true-p straight-base-dir)
-	    user-emacs-directory)))
-      (bootstrap-version 7))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-	(url-retrieve-synchronously
-	 "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-	 'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+(require 'package)
+;; Add MELPA to package sources
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
-;; Use straight for use-package expressions,
-;; Non-nil straight-use-package-by-default means install packages
-;; by default in ‘use-package’ forms.
-(straight-use-package 'use-package)
-(setq straight-use-package-by-default t)
+;; It's initialize all packages if i switch off it in early-init
+;; Load all packages from variable package-load-list
+;; (package-initialize)
+
+;; Prefer GNU over MELPA (optional)
+(setq package-archive-priorities '(("melpa" . 30)("gnu" . 20)("nongnu" . 10)))
+;; Update info about packages from repos
+(package-refresh-contents)
+
+
+;; What I wanna install
+(setq package-selected-packages '())
+
+;; switch off auto-load
+(setq package-load-list '())
+
+
+;; It add package to package list
+(defun package! (pkg)
+  "Add the package PKG to the list of selected packages if it's not already present."
+  (add-to-list 'package-selected-packages pkg))
+
+;; Usage example:
+(package! use-package)
+
+
+
+
+;; Remove packages with
+(package-autoremove)
+;; Install packages with
+(package-install-selected-packages)
+;; If you want to automate that, maybe add them to your 'emacs-startup-hook'?
+
 
 ;; Next, I use literate config I want to have auto tangle
-(use-package org-auto-tangle
-  :hook (org-mode . org-auto-tangle-mode))
+;; (use-package org-auto-tangle
+;;  :hook (org-mode . org-auto-tangle-mode))
 
-(defmacro package! (name &rest args)
-  "A simple macro to declare packages similar to Doom Emacs' `package!`."
-  `(use-package ,name
-     ,@args))
+;;(load-file "~/.emacs.d/configuration.el")
 
-(load-file "~/.emacs.d/configuration.el")
-
-;;; init.el ends here
+;;;;END HERE
